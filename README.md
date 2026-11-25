@@ -14,3 +14,6 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+
+Not that chancellorplus! is a unoffical revival of google+ and all content is user generated, i try my best to remove bad content but sometimes bad things slip through, please contact me if anything is immediate 
