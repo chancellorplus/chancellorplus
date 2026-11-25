@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chancellor+</title>
+<style>
+:root{--blue:#4d90fe;--link:#3c78d8;--bg:#e4e4e4;--panel:#fff;--border:#d8d8d8;--text:#333;--muted:#999;--green:#55a644}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+.hidden{display:none!important}
+.small{font-size:11px;color:var(--muted)}
+.err{color:#c5221f;font-size:12px;margin-top:6px}
+textarea,input[type=text],input[type=password]{width:100%;border:1px solid var(--border);border-radius:0;padding:6px 8px;font-family:inherit;font-size:13px;background:#fff}
+button.btn{background:var(--blue);color:#fff;border:1px solid #3079ed;border-radius:2px;padding:7px 14px;cursor:pointer;font-size:12px;font-weight:bold}
+button.btn.green{background:var(--green);border-color:#478b39}
+button.btn.alt{background:#f8f8f8;color:#444;border:1px solid #ccc}
+button.link{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 4px}
+button.link:hover{color:var(--link)}
+.glogo{font-size:24px;font-weight:bold;letter-spacing:-0.5px;white-space:nowrap}
+.glogo .c1,.glogo .c4{color:#4285f4}.glogo .c2,.glogo .c6{color:#db4437}.glogo .c3{color:#f4b400}.glogo .c5{color:#0f9d58}
+.glogo .plus{color:#8a8a8a;font-weight:normal;margin-left:3px}
+/* ===== Chancellor+ login screen ===== */
+:root{--bgimg:none} /* BACKGROUND PLACEHOLDER: set --bgimg:url('https://files.catbox.moe/XXXXXX.jpg') */
+#loginScreen{position:relative;min-height:100vh;overflow:hidden;color:#fff;font-family:Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  background:#5a2a1c var(--bgimg) center/cover no-repeat}
+#loginScreen::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,#b5472a 0%,#7a2f1d 38%,#c98a6a 62%,#8d3b25 100%);z-index:0}
+#loginScreen.hasbg::before{display:none}
+#bgPlaceholder{position:absolute;right:calc(50% - 120px);bottom:14px;z-index:1;font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.3px;pointer-events:none}
+#loginScreen>*{position:relative;z-index:1}
+#loginTagline{position:absolute;left:17px;top:58px;max-width:520px}
+#loginTagline h1{font-size:44px;line-height:1.1;font-weight:300;margin:0 0 20px;color:#fff}
+#loginTagline p.lead{margin:0;font-size:15px;font-weight:300;line-height:1.45;color:#fff;max-width:430px}
+.feat{display:flex;align-items:center;gap:16px;margin-top:34px}
+.feat .fi{width:54px;height:54px;flex:0 0 54px;display:flex;align-items:center;justify-content:center}
+.feat b{display:block;font-size:19px;font-weight:400}
+.feat span{font-size:14px;font-weight:300}
+#loginBox{position:absolute;right:calc(50% - 685px);top:133px;width:363px;background:#e9e9e9;color:#333;border:none;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.authTabs{display:flex;background:#d2d2d2}
+.authTabs button{flex:1;height:50px;background:none;border:none;border-bottom:3px solid transparent;font:inherit;font-size:15px;color:#666;cursor:pointer}
+.authTabs button.on{background:#e9e9e9;color:#333;border-bottom-color:#d14836}
+.authBody{padding:34px 27px 28px}
+#loginBox h2{margin:0 0 22px;font-size:22px;font-weight:300;color:#555}
+#loginBox h2 b{font-weight:500;color:#222}
+#loginBox label{display:block;font-weight:bold;margin:12px 0 5px;font-size:12px}
+#loginBox input[type=text],#loginBox input[type=password]{height:38px;border:1px solid #d9d9d9;background:#f4f4f4;margin:0 0 20px;padding:0 12px;font-size:15px;border-radius:0}
+#loginBox .authBody input.in2{margin-bottom:12px}
+button.gsign{display:block;width:100%;height:37px;background:#4d8ae8;border:1px solid #3a78db;color:#fff;font-weight:bold;font-size:14px;cursor:pointer;border-radius:2px}
+button.gsign:disabled{opacity:.6;cursor:wait}
+button.gcreate{display:flex;width:100%;height:40px;background:#c0533a;border:1px solid #a9432d;color:#fff;font-weight:bold;font-size:14px;cursor:pointer;border-radius:2px;padding:0;align-items:stretch}
+button.gcreate i{flex:0 0 46px;background:rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font:normal 19px Georgia,serif;border-right:1px solid rgba(255,255,255,.35)}
+button.gcreate span{flex:1;display:flex;align-items:center;justify-content:center}
+.stayrow{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0;color:#444;font-size:13px}
+.stayrow label{margin:0!important;font-weight:normal!important;font-size:13px!important;display:flex;align-items:center;gap:7px}
+.stayrow a,.loginLinks a{color:#1a55c8;cursor:pointer;font-size:12px}
+.orline{display:flex;align-items:center;gap:8px;margin:26px 0 18px;color:#888;font-size:11px}
+.orline:before,.orline:after{content:"";flex:1;border-top:1px solid #d6d6d6}
+.loginLinks{margin-top:14px;text-align:center}
+.authBody .small{color:#666;font-size:12px;margin:0 0 6px}
+.recoveryCode{font-family:monospace;font-size:19px;letter-spacing:1px;text-align:center;background:#fff;border:1px solid #ccc;padding:12px;margin:12px 0;word-break:break-all;user-select:all}
+.capRow{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.capRow canvas{border:1px solid #ccc;flex:0 0 auto;max-width:100%}
+.pwhint{font-size:11px;color:#777;margin:-12px 0 12px}
+@media (max-width:1400px){#loginBox{right:40px}}
+@media (max-width:900px){
+  #loginScreen{min-height:100vh;padding:20px 16px 40px}
+  #loginTagline{position:static;max-width:none;margin-bottom:26px}
+  #loginTagline h1{font-size:32px}
+  #loginBox{position:static;width:100%}
+  #bgPlaceholder{display:none}
+}
+header{background:#fff;height:56px;padding:0 16px;display:flex;align-items:center;gap:18px}
+.searchWrap{flex:1;max-width:480px;display:flex}
+.searchWrap input{border-right:none;height:28px}
+.searchBtn{width:70px;background:var(--blue);border:1px solid #3079ed;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:0 2px 2px 0}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px;white-space:nowrap;color:#333;position:relative}
+.notifbadge{background:#d24b2e;color:#fff;font-weight:bold;padding:4px 9px;cursor:pointer}
+.bellbox,.idbox{position:relative}
+.idbox{display:flex;align-items:center;gap:3px;cursor:pointer}
+.hdr-avatar{width:34px;height:34px;border-radius:50%;background:#8ab4f8;color:#4a76d4;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hdr-avatar img{width:100%;height:100%;object-fit:cover}
+.caret{color:var(--muted);font-size:10px}
+.dropmenu{position:absolute;right:0;top:100%;margin-top:6px;background:#fff;border:1px solid #ccc;box-shadow:0 2px 6px rgba(0,0,0,.2);min-width:180px;z-index:20}
+.dropmenu button{display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;cursor:pointer;font-size:13px;color:#333}
+.dropmenu button:hover{background:#f1f1f1}
+.notifdrop{width:280px;max-height:320px;overflow-y:auto}
+.notifrow{padding:9px 12px;border-bottom:1px solid #eee;cursor:pointer;font-size:12px}
+.notifrow:hover{background:#f6f6f6}
+.subnav{background:#f4f4f4;height:44px;padding:0 16px;display:flex;align-items:center;border-bottom:1px solid #e9e9e9}
+.sectionSwitch{position:relative;width:160px}
+.sectionSwitch>button{display:flex;align-items:center;gap:7px;background:#fff;border:none;box-shadow:0 1px 2px rgba(0,0,0,.2);padding:6px 10px;cursor:pointer;color:#555;font-size:13px}
+.sectionMenu{position:absolute;left:0;top:100%;margin-top:4px;background:#fff;border:1px solid #ccc;box-shadow:0 2px 6px rgba(0,0,0,.2);min-width:160px;z-index:20}
+.sectionMenu button{display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;cursor:pointer;font-size:13px}
+.sectionMenu button:hover{background:#f1f1f1}
+nav{flex:1;display:flex;justify-content:center;gap:26px}
+nav button{background:none;border:none;height:44px;padding:0 4px;cursor:pointer;color:#666;font-size:14px;border-bottom:3px solid transparent}
+nav button.active{color:#000;font-weight:bold;border-color:#4479d6}
+.subnav-right{width:160px;display:flex;justify-content:flex-end}
+.statusdot{width:11px;height:11px;border-radius:50%;background:#0f9d58;cursor:pointer}
+.statusdot.down{background:#db4437}
+#layout{max-width:1100px;margin:16px auto;padding:0 16px}
+#board{display:flex;gap:18px;align-items:flex-start;justify-content:center}
+#colLeft{flex:0 0 440px;display:flex;flex-direction:column;gap:18px}
+#colRight{flex:0 1 440px;min-width:0;display:flex;flex-direction:column;gap:18px}
+.panel{background:var(--panel);border:1px solid #ccc;box-shadow:0 1px 3px 1px rgba(0,0,0,.09);padding:12px}
+.compose{background:#f6f6f6}
+.compose textarea{height:80px;resize:none;border:1px solid var(--border);padding:8px}
+.composeIcons{display:flex;gap:26px;margin:16px 0 4px 10px}
+.cicon{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;color:#8b8b8b;font-size:11px}
+.cicon.active{color:#000;font-weight:bold}
+.cicon.active svg{color:var(--green)}
+.composeExtra{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.composeActions{margin-top:10px;display:flex;gap:8px;align-items:center}
+.explore-card{padding:0}
+.explore-banner{background:#4479d6;color:#fff;font-size:20px;padding:20px 20px 24px}
+.explore-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;padding:20px}
+.explore-cats a{color:#333;cursor:pointer;font-size:13px}
+.explore-cats a:hover{color:var(--link);text-decoration:underline}
+.pend{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-top:1px solid #eee}.pend img,.pend video{max-width:120px;max-height:120px}.mediaGate{background:#f0f0f0;border:1px dashed #bbb;color:#777;padding:18px;margin-top:8px;text-align:center;font-size:12px}.pendingTag{font-size:11px;color:#b06000;margin-top:4px}.modTools{margin-left:auto;font-size:11px}.modTools a{margin-right:8px;color:#1a55c8;cursor:pointer}.hot-head{background:#f6f6f6}
+.hot-head h2{margin:14px 0 14px;font-size:30px;font-weight:400;color:#a5a5a5}
+.hot-head b{font-size:12px;color:#333}
+.hotPosts{display:flex;flex-direction:column;gap:18px}
+.post{background:#fff;border:1px solid #ccc;box-shadow:0 1px 3px 1px rgba(0,0,0,.09)}
+.post-main{padding:14px 14px 10px}
+.post-head{display:flex;align-items:center;gap:12px}
+.avatar{width:36px;height:36px;border-radius:50%;background:#8ab4f8;color:#4a76d4;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover;aspect-ratio:1/1}
+.uname{font-weight:bold;color:#222;font-size:14px;cursor:pointer}
+.uname:hover{color:var(--link)}
+.meta{color:var(--muted);font-size:12px;margin-top:2px}
+.post-body{margin:22px 0 6px;white-space:pre-wrap;word-break:break-word;font-size:13px;color:#404040}
+.post img.pimg{display:block;max-width:100%;margin-top:8px}
+.post video.pvid{display:block;width:100%;max-height:420px;margin-top:8px;background:#000}
+.post-footer{display:flex;align-items:center;gap:8px;padding:8px 14px 14px}
+.plusBtn{min-width:32px;height:30px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:14px;font-weight:bold;color:#000;padding:0 8px}
+.plusBtn.reacted{background:#cc4331;border-color:#cc4331;color:#fff}
+.commentInline{flex:1;min-width:0;height:30px}
+.comments{background:#f4f4f4;border-top:1px solid #fff;padding:4px 14px 10px}
+.comment{display:flex;gap:10px;margin-top:12px}
+.comment .avatar{width:28px;height:28px;border-radius:3px}
+.comment-head{font-size:12px}
+.comment-head b{text-transform:uppercase;color:#333;margin-right:8px}
+.comment-head span{color:#aaa}
+.comment-text{font-size:13px;margin-top:2px;white-space:pre-wrap;word-break:break-word}
+.comment-replies{margin-left:10px}
+.highlight{background:#fff7cc}
+.profile-banner{display:flex;height:240px;max-width:900px;margin:0 auto}
+.pb-left{flex:0 0 32%;background:linear-gradient(170deg,#2b7a45,#1c3d26);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff}
+.pb-left .avatar{border:none}
+.pb-name{font-size:18px}
+.pb-follow{font-size:11px;font-weight:bold}
+.pb-right{flex:1;position:relative;overflow:hidden;background:linear-gradient(#a7f08e,#4fb46a)}
+.hill{position:absolute;border-radius:50%}
+.h1{width:120%;height:70%;left:-10%;bottom:-38%;background:#3f9d5d}
+.h2{width:100%;height:60%;left:20%;bottom:-40%;background:#2c7a45}
+.h3{width:70%;height:90%;left:-15%;top:-30%;background:rgba(255,255,255,.12)}
+.profile-tabsbar{display:flex;justify-content:center;background:#fff;max-width:900px;margin:0 auto 18px;height:36px}
+.profile-tabsbar button{background:none;border:none;padding:0 20px;cursor:pointer;color:#555;font-size:12px;border-bottom:2px solid transparent}
+.profile-tabsbar button.active{font-weight:bold;color:#000;border-color:#4479d6}
+.fullpanel{max-width:900px;margin:0 auto}
+.about-block{margin-bottom:16px}
+.about-block h3{margin:0 0 8px;font-size:14px}
+.about-block input{margin-bottom:6px}
+.follow-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px}
+.photo-cell{background:#fff;border:1px solid #ddd;border-radius:4px;padding:4px}
+.photo-cell img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;cursor:pointer}
+.photo-grid-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px 0}
+.communities-wrap{max-width:1100px;margin:0 auto}
+.communities-head{display:flex;justify-content:space-between;align-items:center;margin:20px 0 14px}
+.communities-head h1{font-size:22px;font-weight:400;color:#606060;margin:0}
+.section-title{font-size:16px;color:#606060;margin:26px 0 12px}
+.community-grid{display:flex;flex-wrap:wrap;gap:20px}
+.community-tile{width:250px;background:#fff;box-shadow:0 1px 3px 1px rgba(0,0,0,.09)}
+.community-banner{height:200px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75)}
+.community-body{padding:10px 12px 12px}
+.community-name{font-weight:bold;color:#606060;font-size:14px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.community-meta{color:#646766;font-size:11px;margin-bottom:8px}
+.create-community{max-width:340px;display:flex;flex-direction:column;gap:8px}
+@media (max-width:960px){
+  #board{flex-direction:column;align-items:stretch}
+  #colLeft,#colRight{flex:none;width:100%}
+  .profile-banner{height:200px}
+}
+@media (max-width:760px){
+  header{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px}
+  .searchWrap{order:3;flex-basis:100%;max-width:100%}
+  #whoami{display:none}
+  .sectionSwitch,.subnav-right{width:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div id="bgPlaceholder">[ background image placeholder: set LOGIN_BG in the script, or --bgimg in CSS ]</div>
+  <div id="loginTagline">
+    <h1>Share with the people<br>who matter.</h1>
+    <p class="lead">Join Chancellor+ to stay closer to the people you care about, share what&rsquo;s new, and discover great content.</p>
+    <div class="feat"><div class="fi" data-icon-key="circles"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="21" cy="33" r="13" fill="none" stroke="#d9402b" stroke-width="9"/><circle cx="35" cy="21" r="9" fill="none" stroke="#9e9e9e" stroke-width="6"/></svg></div><div><b>Circles</b><span>Share with just the right people.</span></div></div>
+    <div class="feat"><div class="fi" data-icon-key="communities"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="#4caf50"/><g fill="#fff"><circle cx="27" cy="16" r="4"/><circle cx="17" cy="26" r="4"/><circle cx="37" cy="26" r="4"/><circle cx="21" cy="37" r="4"/><circle cx="33" cy="37" r="4"/></g></svg></div><div><b>Communities</b><span>Find people with your interests.</span></div></div>
+    <div class="feat"><div class="fi" data-icon-key="photos"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M27 27V4a14 14 0 0 1 14 12z" fill="#ea4335"/><path d="M27 27l14-11a14 14 0 0 1 9 11z" fill="#fbbc05"/><path d="M27 27h23a14 14 0 0 1-9 13z" fill="#34a853"/><path d="M27 27l14 13a14 14 0 0 1-14 10z" fill="#4285f4"/><path d="M27 27v23a14 14 0 0 1-14-12z" fill="#fbbc05"/><path d="M27 27L13 38a14 14 0 0 1-9-11z" fill="#34a853"/><path d="M27 27H4a14 14 0 0 1 9-13z" fill="#ea4335"/><path d="M27 27L13 14A14 14 0 0 1 27 4z" fill="#4285f4"/></svg></div><div><b>Photos</b><span>Back up and share your photos.</span></div></div>
+  </div>
+  <div id="loginBox">
+    <div class="authTabs"><button id="tabSignin" class="on" type="button">Sign in</button><button id="tabCreate" type="button">Create account</button></div>
+    <div class="authBody">
+      <div id="stepLogin">
+        <h2>Sign in to <b>Chancellor+</b></h2>
+        <input type="text" id="loginUser" placeholder="Username" autocomplete="username" maxlength="40">
+        <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" maxlength="200">
+        <button class="gsign" id="loginBtn" type="button">Sign in</button>
+        <div class="stayrow"><label for="stayCheckbox"><input type="checkbox" id="stayCheckbox" checked>Stay signed in</label><a id="forgotLink">Need help?</a></div>
+        <div id="loginErr" class="err"></div>
+        <div class="orline">&mdash;or&mdash;</div>
+        <button class="gcreate" id="toCreateBtn" type="button"><i>g+</i><span>Create a Chancellor+ account</span></button>
+        <div class="loginLinks"><a id="browseLink">Browse without signing in</a></div>
+      </div>
+      <div id="stepSignup" class="hidden">
+        <h2>Create your <b>Chancellor+</b> account</h2>
+        <input type="text" id="signupUser" placeholder="Username (3-24: a-z 0-9 _ -)" autocomplete="username" maxlength="24">
+        <input type="password" id="signupPass" placeholder="Password (12+ characters)" autocomplete="new-password" maxlength="200">
+        <input type="password" id="signupPass2" placeholder="Retype password" autocomplete="new-password" maxlength="200">
+        <div class="capRow"><canvas id="capCanvas" width="220" height="70"></canvas><button class="link" id="capAgain" type="button">New image</button></div>
+        <input type="text" id="capInput" placeholder="Type the letters you see" autocomplete="off" autocapitalize="characters" maxlength="8">
+        <button class="gsign" id="signupBtn" type="button">Create account</button>
+        <div id="signupErr" class="err"></div>
+        <div class="small" style="margin-top:12px">No email needed. You will get a recovery code: it is the only way to reset a forgotten password.</div>
+      </div>
+      <div id="stepForgot" class="hidden">
+        <h2>Reset your password</h2>
+        <input type="text" id="forgotUser" placeholder="Username" autocomplete="username" maxlength="40">
+        <input type="text" id="forgotCode" placeholder="Recovery code" autocomplete="off" maxlength="60">
+        <input type="password" id="forgotNewPass" placeholder="New password (12+ characters)" autocomplete="new-password" maxlength="200">
+        <button class="gsign" id="forgotBtn" type="button">Reset password</button>
+        <div id="forgotErr" class="err"></div>
+        <div class="loginLinks"><a id="backFromForgot">Back to sign in</a></div>
+      </div>
+      <div id="stepRecovery" class="hidden">
+        <h2>Save your recovery code</h2>
+        <div class="small" id="recNote"></div>
+        <div class="small">This code is the only way back into your account if you forget your password. Nobody, including admins, can recover it, and it will not be shown again.</div>
+        <div class="recoveryCode" id="recCode"></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px"><button class="btn alt" id="recCopy" type="button">Copy</button><button class="btn alt" id="recDl" type="button">Download</button></div>
+        <div class="small" id="recHandle"></div>
+        <div class="stayrow" style="margin:6px 0 14px"><label for="recSaved"><input type="checkbox" id="recSaved">I have saved my recovery code</label></div>
+        <button class="gsign" id="recGo" type="button" disabled>Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <div class="glogo"><b class="c1">C</b><b class="c2">h</b><b class="c3">a</b><b class="c4">n</b><b class="c5">c</b><b class="c2">e</b><b class="c1">l</b><b class="c3">l</b><b class="c5">o</b><b class="c6">r</b><span class="plus">+</span></div>
+  <div style="flex:1;max-width:480px">
+    <div class="searchWrap">
+      <input type="text" id="search" placeholder="Search for people, pages, or posts">
+      <button class="searchBtn" id="searchBtn" type="button"><span data-icon="search"></span></button>
+    </div>
+    <div id="searchHint" class="small hidden"></div>
+  </div>
+  <div class="hdr-right">
+    <span id="whoami"></span>
+    <div class="bellbox">
+      <div class="notifbadge hidden" id="bellBtn"><span id="bellCount">0</span></div>
+      <div class="dropmenu notifdrop hidden" id="notifDrop"></div>
+    </div>
+    <button class="btn alt" id="shareBtn" type="button">+ Share</button>
+    <div class="idbox">
+      <div class="hdr-avatar" id="hdrAvatar"></div>
+      <span class="caret">&#9662;</span>
+      <div class="dropmenu hidden" id="idDrop">
+        <button id="myProfileLink">My profile</button>
+        <button id="editProfileLink">Edit profile</button>
+        <button id="adminLink" class="hidden">Admin panel</button>
+        <button id="pubKeyLink" class="hidden">My public key</button>
+        <button id="switchIdBtn">Sign out / switch account</button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="subnav">
+  <div class="sectionSwitch">
+    <button id="sectionSwitchBtn" type="button"><span data-icon="home"></span><span id="sectionLabel">Home</span><span class="caret">&#9662;</span></button>
+    <div class="sectionMenu hidden" id="sectionMenu">
+      <button data-section="home">Home</button>
+      <button data-section="communities">Communities</button>
+    </div>
+  </div>
+  <nav>
+    <button data-tab="all" class="active">All</button>
+    <button data-tab="explore">Explore</button>
+    <button data-tab="following">Following</button>
+    <button data-tab="photos">Photos</button>
+  </nav>
+  <div class="subnav-right"><span class="statusdot" id="statusDot" title="Relay status"></span></div>
+</div>
+
+<div id="layout">
+  <div id="profileBanner" class="hidden"></div>
+  <div id="profileTabsBar" class="hidden"></div>
+
+  <div id="board">
+    <div id="colLeft">
+      <div class="panel compose" id="composePanel">
+        <textarea id="composeText" placeholder="Share what's new..."></textarea>
+        <div class="composeIcons">
+          <button type="button" class="cicon active" id="cIconText"><span data-icon="text"></span>Text</button>
+          <button type="button" class="cicon" id="cIconPhotos"><span data-icon="photo"></span>Photos</button>
+          <button type="button" class="cicon" id="cIconVideo"><span data-icon="video"></span>Video</button>
+        </div>
+        <div class="composeExtra hidden" id="composeExtra">
+          <input type="text" id="composeImg" placeholder="Image URL (https://files.catbox.moe/...)">
+          <input type="text" id="composeVideo" class="hidden" placeholder="Video URL (https://files.catbox.moe/....mp4, .webm, .mov)">
+          <div><button class="btn alt" id="catboxBtn" type="button">Open Catbox</button></div>
+        </div>
+        <div class="composeActions">
+          <button class="btn green" id="postBtn" type="button">Share</button>
+          <span class="small" id="composeMsg"></span>
+        </div>
+      </div>
+      <div class="panel explore-card" id="exploreCard">
+        <div class="explore-banner">Explore Chancellor+</div>
+        <div class="explore-cats" id="exploreCats"></div>
+      </div>
+      <div id="hotCard" class="hidden">
+        <div class="panel hot-head"><h2>What's hot and recommended</h2><b>These posts are popular on Chancellor+</b></div>
+        <div class="hotPosts" id="hotPosts" style="margin-top:18px"></div>
+      </div>
+    </div>
+    <div id="colRight">
+      <div class="small" id="feedEmpty">Loading posts…</div>
+    </div>
+  </div>
+
+  <div class="fullpanel hidden" id="photosPanel">
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+
+  <div class="panel fullpanel hidden" id="profileAboutPanel">
+    <div id="aboutBioView" class="small"></div>
+    <div id="aboutOwnControls" class="hidden">
+      <div class="about-block">
+        <h3>Edit profile</h3>
+        <input type="text" id="profDisplay" placeholder="Display name">
+        <input type="text" id="profBio" placeholder="Bio">
+        <input type="text" id="profAvatar" placeholder="Avatar image URL (files.catbox.moe, must be square)">
+        <button class="btn alt" id="saveProfBtn" type="button">Save profile</button>
+        <div class="small" id="profErr" style="margin-top:4px"></div>
+      </div>
+      <div class="about-block">
+        <h3>Change password</h3>
+        <input type="password" id="oldPassField" placeholder="current password">
+        <input type="password" id="newPassField" placeholder="new password">
+        <button class="btn alt" id="changePassBtn" type="button">Change password</button>
+        <div class="small" id="changePassErr" style="margin-top:4px"></div>
+      </div>
+      <div class="about-block"><div id="newCodeBox" class="hidden"></div></div>
+      <div class="about-block">
+        <h3>Following</h3>
+        <div id="followList" class="small">None yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel fullpanel hidden" id="adminPanel"><h3 style="margin:0 0 4px">Media approval</h3><div class="small" style="margin-bottom:10px">Uploads from non-admin accounts stay hidden until approved here.</div><div id="adminPending"></div></div>
+
+  <div class="communities-wrap hidden" id="communitiesSection">
+    <div class="communities-head"><h1>Communities you've joined</h1></div>
+    <div class="community-grid" id="communityJoinedGrid"></div>
+    <div class="section-title">Create a community</div>
+    <div class="panel create-community">
+      <input type="text" id="newCommunityName" placeholder="Community name">
+      <input type="text" id="newCommunityDesc" placeholder="Description">
+      <div><button class="btn" id="createCommunityBtn" type="button">Create Community</button></div>
+      <div class="small" id="communityErr"></div>
+    </div>
+    <div class="section-title">All communities</div>
+    <div class="community-grid" id="communityAllGrid"></div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+<script type="module">
+import * as NT from 'https://cdn.jsdelivr.net/npm/nostr-tools@2.10.4/+esm';
+import { SimplePool, finalizeEvent, getPublicKey, verifyEvent } from 'https://cdn.jsdelivr.net/npm/nostr-tools@2.10.4/+esm';
+
+const RELAYS = ["wss://relay.damus.io","wss://nos.lol","wss://relay.nostr.band","wss://relay.primal.net","wss://relay.snort.social","wss://nostr.mom","wss://offchain.pub"];
+const APP_NAMESPACE = "chancellor-plus-v1";   // stop reading my code comments
+const FOREIGN_NS = ["uoogle-plus","rdf-party"];
+const ACCOUNT_KIND = 7391, MOD_KIND = 7392, MEDIA_KIND = 7395, COMMUNITY_KIND = 32291;
+const MOD_TAG = APP_NAMESPACE + '-mod';
+const IMG_HOST = "files.catbox.moe";
+
+const LOGIN_BG = "https://files.catbox.moe/43z79x.jpg";          // login background, e.g. "https://files.catbox.moe/abc123.jpg"
+const LOGO_URL = "https://files.catbox.moe/eqcfos.png";          // header logo, e.g. "https://files.catbox.moe/logo123.png"
+const ICON_CIRCLES_URL = "https://files.catbox.moe/erdnpu.png";  // login "Circles" icon
+const ICON_COMMUNITIES_URL = "https://files.catbox.moe/rjc2d6.png"; // login "Communities" icon
+const ICON_PHOTOS_URL = "https://files.catbox.moe/a7zeem.png";   // login "Photos" icon
+const ADMIN_USERNAME = 'admin';
+// To make an account admin: sign up as "admin", open the avatar menu > "My public key", paste it here, redeploy.
+const ADMIN_PUBKEYS = ["2639687cad9cf48098db9d12d2c271b02724e37ec19528898faf0fc62038bff6"];
+const PBKDF2_ITER = 150000, BCRYPT_COST = 12, MIN_PASSWORD = 12;
+const pool = new SimplePool();
+
+function lsGet(k,f){ try{ const v=localStorage.getItem(k); return v===null?f:JSON.parse(v);}catch(e){return f;} }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+const HEX64 = /^[0-9a-f]{64}$/;
+const MIN_TS = 1700000000, MAX_FUTURE = 600, MAX_CONTENT = 6000, MAX_ACCOUNT_EVENTS = 300, MAX_CANDIDATES = 5, KDF_BUDGET = 12;
+const POW_BITS = 12;
+const DUMMY_SALT = '$2a$12$abcdefghijklmnopqrstuu';
+const THROTTLE_KEY = 'chancellor_auth_throttle';
+const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+const COMMON_PW = ['password','passw0rd','qwerty','letmein','welcome','iloveyou','admin','123456','abcdef','monkey','dragon','chancellor'];
+let authBusy = false;
+
+async function sha256Bytes(str){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)); return new Uint8Array(b); }
+function bytesToHex(b){ return Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join(''); }
+function hexToBytes(hex){ const b=new Uint8Array(hex.length/2); for(let i=0;i<b.length;i++) b[i]=parseInt(hex.substr(i*2,2),16); return b; }
+async function sha256Hex(str){ return bytesToHex(await sha256Bytes(str)); }
+function normUser(u){ return (u||'').trim().toLowerCase(); }
+async function randomBytes(n){ const b=new Uint8Array(n); crypto.getRandomValues(b); return b; }
+function utf8(s){ return new TextEncoder().encode(s); }
+function bytesToB64(b){ let s=''; for(const x of b) s+=String.fromCharCode(x); return btoa(s); }
+function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+function nowSec(){ return Math.floor(Date.now()/1000); }
+function tagOf(pubkey){ return '@' + pubkey.slice(0,6).toUpperCase(); }
+function cleanName(s){ return String(s||'').replace(/[\u0000-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g,'').trim().slice(0,32); }
+async function usernameIndex(un){ return sha256Hex('Chancellor-account-index-v1:' + un); }
+
+function eventShapeOk(e){
+  if(!e || typeof e!=='object') return false;
+  if(!HEX64.test(e.id||'') || !HEX64.test(e.pubkey||'')) return false;
+  if(typeof e.sig!=='string' || e.sig.length!==128) return false;
+  if(!Number.isInteger(e.kind) || !Number.isInteger(e.created_at)) return false;
+  if(e.created_at < MIN_TS || e.created_at > nowSec() + MAX_FUTURE) return false;
+  if(typeof e.content!=='string' || e.content.length > MAX_CONTENT) return false;
+  if(!Array.isArray(e.tags) || e.tags.length > 24) return false;
+  for(const t of e.tags){
+    if(!Array.isArray(t) || t.length<1 || t.length>6) return false;
+    for(const x of t) if(typeof x!=='string' || x.length>400) return false;
+  }
+  return true;
+}
+// Strict namespace gate: must carry OUR tag and never another app's tag.
+function inOurNamespace(e){
+  let ours = false;
+  for(const t of e.tags){
+    if(t[0]!=='t') continue;
+    const v = (t[1]||'').toLowerCase();
+    if(FOREIGN_NS.some(f=>v.indexOf(f)===0)) return false;
+    if(v===APP_NAMESPACE || v.indexOf(APP_NAMESPACE+'-')===0) ours = true;
+  }
+  return ours;
+}
+function leadingZeroBits(hex){
+  let n = 0;
+  for(const ch of hex){ const v = parseInt(ch, 16); if(v === 0){ n += 4; continue; } n += Math.clz32(v) - 28; break; }
+  return n;
+}
+async function eventIdHex(e){ return sha256Hex(JSON.stringify([0, e.pubkey, e.created_at, e.kind, e.tags, e.content])); }
+async function minePow(evt, bits, maxIter){
+  const limit = maxIter || (1 << 22);
+  const base = evt.tags.filter(t=>t[0]!=='nonce');
+  for(let n=0; n<limit; n++){
+    const e = Object.assign({}, evt, {tags: base.concat([['nonce', String(n), String(bits)]])});
+    if(leadingZeroBits(await eventIdHex(e)) >= bits) return e;
+    if(n % 256 === 255) await sleep(0);
+  }
+  throw new Error('Could not finish the posting proof-of-work, please try again.');
+}
+
+function getBcrypt(){ const b = window.dcodeIO && window.dcodeIO.bcrypt; if(!b) throw new Error('The bcrypt library failed to load. Check your connection and reload the page.'); return b; }
+function bcryptGenSalt(cost){ const b=getBcrypt(); return new Promise((res,rej)=>b.genSalt(cost,(e,s)=>e?rej(e):res(s))); }
+function bcryptHash(str, salt){ const b=getBcrypt(); return new Promise((res,rej)=>b.hash(str,salt,(e,h)=>e?rej(e):res(h))); }
+function validBcryptSalt(s){ const m = /^\$2[aby]\$(\d\d)\$[./A-Za-z0-9]{22}$/.exec(s||''); if(!m) return false; const c = parseInt(m[1],10); return c>=10 && c<=13; }
+async function bcryptKey(secretStr, saltStr){
+  const pre = bytesToB64(await sha256Bytes(secretStr));
+  const hashStr = await bcryptHash(pre, saltStr);
+  const km = await crypto.subtle.importKey('raw', utf8(hashStr), 'HKDF', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'HKDF', hash:'SHA-256', salt:new Uint8Array(0), info:utf8('Chancellor-wrap-v1')}, km, 256);
+  return new Uint8Array(bits);
+}
+async function dummyKdf(){ await bcryptKey('chancellor-dummy-password', DUMMY_SALT); }
+async function aesEncrypt(keyBytes, plainBytes){
+  const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['encrypt']);
+  const iv = await randomBytes(12);
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, plainBytes);
+  return { iv: bytesToHex(iv), ct: bytesToHex(new Uint8Array(ct)) };
+}
+async function aesDecrypt(keyBytes, ivHex, ctHex){
+  const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
+  return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM', iv: hexToBytes(ivHex)}, key, hexToBytes(ctHex)));
+}
+async function makeEnc(secret, plainBytes){
+  const salt = await bcryptGenSalt(BCRYPT_COST);
+  const e = await aesEncrypt(await bcryptKey(secret, salt), plainBytes);
+  return {kdf:'bcrypt', salt, iv:e.iv, ct:e.ct};
+}
+function encFieldsOk(e){ return !!e && typeof e==='object' && /^[0-9a-f]{24}$/.test(e.iv||'') && /^[0-9a-f]{96}$/.test(e.ct||''); }
+function bcryptEncOk(e){ return encFieldsOk(e) && e.kdf==='bcrypt' && validBcryptSalt(e.salt); }
+async function openEnc(secret, enc){
+  if(!bcryptEncOk(enc)) return null;
+  getBcrypt();
+  try{ return await aesDecrypt(await bcryptKey(secret, enc.salt), enc.iv, enc.ct); }catch(e){ return null; }
+}
+
+function newRecoveryCode(){
+  const b = crypto.getRandomValues(new Uint8Array(16));
+  let bits = 0, val = 0, out = '';
+  for(const x of b){ val = (val << 8) | x; bits += 8; while(bits >= 5){ out += B32[(val >>> (bits - 5)) & 31]; bits -= 5; } }
+  if(bits > 0) out += B32[(val << (5 - bits)) & 31];
+  return out;
+}
+function formatRecovery(c){ return c.match(/.{1,4}/g).join('-'); }
+function normalizeRecovery(s){
+  const c = String(s||'').toUpperCase().replace(/[^0-9A-Z]/g,'').replace(/O/g,'0').replace(/[IL]/g,'1');
+  return /^[0-9A-HJKMNP-TV-Z]{26}$/.test(c) ? c : null;
+}
+async function recoveryKey(code){
+  const km = await crypto.subtle.importKey('raw', utf8(code), 'HKDF', false, ['deriveBits']);
+  return new Uint8Array(await crypto.subtle.deriveBits({name:'HKDF', hash:'SHA-256', salt:utf8('Chancellor-recovery-salt-v1'), info:utf8('Chancellor-recovery-v1')}, km, 256));
+}
+async function makeRecoveryEnc(code, plain){ const e = await aesEncrypt(await recoveryKey(code), plain); return {kdf:'recovery', iv:e.iv, ct:e.ct}; }
+async function openRecoveryEnc(code, enc){
+  if(!encFieldsOk(enc) || enc.kdf!=='recovery') return null;
+  try{ return await aesDecrypt(await recoveryKey(code), enc.iv, enc.ct); }catch(e){ return null; }
+}
+
+function validNewName(un){ return /^[a-z0-9_-]{3,24}$/.test(un); }
+function passwordProblem(pw, name){
+  if(typeof pw!=='string' || pw.length < MIN_PASSWORD) return 'Password must be at least ' + MIN_PASSWORD + ' characters.';
+  if(pw.length > 200) return 'Password is too long.';
+  const l = pw.toLowerCase();
+  if(name && l.indexOf(name) !== -1) return 'Password must not contain your username.';
+  if(new Set(pw).size < 6) return 'Password is too repetitive.';
+  if(pw.length < 20 && COMMON_PW.some(w=>l.indexOf(w) !== -1)) return 'Password is too easy to guess. A few unrelated words make a good passphrase.';
+  return '';
+}
+function parseHandle(raw){
+  const s = String(raw||'').trim().toLowerCase();
+  const m = /^(.+?)\s*[#@]\s*([0-9a-f]{4,64})$/.exec(s);
+  return m ? {name: m[1].trim(), hint: m[2]} : {name: s, hint: ''};
+}
+
+// ---- per-device login throttle ----
+function throttleKeys(scope, name){ return [scope + ':' + name, scope + ':*']; }
+function throttleState(){ const s = lsGet(THROTTLE_KEY, {}); return (s && typeof s==='object' && !Array.isArray(s)) ? s : {}; }
+function throttleWait(scope, name){
+  const s = throttleState(), now = Date.now(); let w = 0;
+  for(const k of throttleKeys(scope, name)){ const e = s[k]; if(e && typeof e.until==='number' && e.until > now) w = Math.max(w, Math.ceil((e.until - now) / 1000)); }
+  return w;
+}
+function throttleFail(scope, name){
+  const s = throttleState(), now = Date.now();
+  for(const k of throttleKeys(scope, name)){
+    const old = s[k];
+    const e = (old && typeof old.last==='number' && now - old.last < 3600000) ? old : {fails:0};
+    e.fails = (e.fails||0) + 1; e.last = now;
+    e.until = e.fails >= 3 ? now + Math.min(900, Math.pow(2, e.fails - 2)) * 1000 : 0;
+    s[k] = e;
+  }
+  const keys = Object.keys(s);
+  if(keys.length > 40) keys.sort((a,b)=>(s[a].last||0)-(s[b].last||0)).slice(0, keys.length-40).forEach(k=>{ delete s[k]; });
+  lsSet(THROTTLE_KEY, s);
+}
+function throttleOk(scope, name){ const s = throttleState(); throttleKeys(scope, name).forEach(k=>{ delete s[k]; }); lsSet(THROTTLE_KEY, s); }
+
+// ---- account records ----
+function dedupeEvents(list){
+  const seen = new Set(), out = [];
+  for(const e of (Array.isArray(list) ? list : [])){
+    if(!e || typeof e!=='object' || typeof e.id!=='string' || seen.has(e.id)) continue;
+    seen.add(e.id); out.push(e); if(out.length >= MAX_ACCOUNT_EVENTS) break;
+  }
+  return out;
+}
+async function fetchAccountEvents(un){
+  const idx = await usernameIndex(un);
+  let evs = [];
+  try{ evs = await pool.querySync(RELAYS, {kinds:[ACCOUNT_KIND], '#t':[APP_NAMESPACE + '-u-' + idx], limit:100}, {maxWait:8000}); }catch(e){}
+  return {idx, v3: dedupeEvents(evs)};
+}
+function parseV3(ev, un, idx){
+  if(!eventShapeOk(ev) || ev.kind!==ACCOUNT_KIND) return null;
+  if(!ev.tags.some(t=>t[0]==='t' && t[1]===APP_NAMESPACE + '-u-' + idx)) return null;
+  try{ if(!verifyEvent(ev)) return null; }catch(e){ return null; }
+  let d; try{ d = JSON.parse(ev.content); }catch(e){ return null; }
+  if(!d || typeof d!=='object' || d.v!==1 || d.type!=='account' || d.username!==un) return null;
+  if(!bcryptEncOk(d.encByPassword) || !encFieldsOk(d.encByRecovery) || d.encByRecovery.kdf!=='recovery') return null;
+  return {ev, data:d, pubkey:ev.pubkey};
+}
+async function collectClaims(un){
+  const f = await fetchAccountEvents(un);
+  const byPk = new Map();
+  for(const ev of f.v3){
+    const r = parseV3(ev, un, f.idx); if(!r) continue;
+    const cur = byPk.get(r.pubkey);
+    if(!cur){ byPk.set(r.pubkey, {pubkey:r.pubkey, first:ev.created_at, newest:r, ids:[ev.id]}); continue; }
+    cur.ids.push(ev.id);
+    if(ev.created_at < cur.first) cur.first = ev.created_at;
+    if(ev.created_at > cur.newest.ev.created_at || (ev.created_at === cur.newest.ev.created_at && ev.id < cur.newest.ev.id)) cur.newest = r;
+  }
+  return Array.from(byPk.values());
+}
+function pickCandidates(un, hint, claims){
+  let v3 = claims.slice();
+  if(un===ADMIN_USERNAME && ADMIN_PUBKEYS.length) v3 = v3.filter(c=>ADMIN_PUBKEYS.includes(c.pubkey));
+  if(hint) v3 = v3.filter(c=>c.pubkey.indexOf(hint)===0);
+  v3.sort((a,b)=>a.first-b.first || (a.pubkey < b.pubkey ? -1 : 1));
+  return v3.slice(0, MAX_CANDIDATES);
+}
+async function buildRecord(sk, un, password, code, minTs){
+  const pubkey = getPublicKey(sk);
+  const encByPassword = await makeEnc(password, sk);
+  const encByRecovery = await makeRecoveryEnc(code, sk);
+  const idx = await usernameIndex(un);
+  const content = JSON.stringify({v:1, type:'account', username:un, encByPassword, encByRecovery});
+  return finalizeEvent({kind:ACCOUNT_KIND, created_at:Math.max(nowSec(), (minTs||0) + 1), tags:[['t',APP_NAMESPACE],['t',APP_NAMESPACE + '-u-' + idx]], content, pubkey}, sk);
+}
+async function publishRecord(sk, un, password, code, oldIds, minTs){
+  const rec = await buildRecord(sk, un, password, code, minTs);
+  const item = publishEverywhere(rec);
+  if(!(await waitForAck(item, 15000))) throw new Error('No relay accepted the account record. Check your connection and try again.');
+  if(oldIds && oldIds.length){
+    publishEverywhere(finalizeEvent({kind:5, created_at:nowSec(), tags:oldIds.slice(0,20).map(id=>['e',id]).concat([['k', String(ACCOUNT_KIND)]]), content:'superseded account record', pubkey:getPublicKey(sk)}, sk));
+  }
+  return rec;
+}
+async function createAccount(username, password){
+  const un = normUser(username);
+  if(!validNewName(un)) throw new Error('Names are 3-24 characters: letters, numbers, _ or -.');
+  if(un===ADMIN_USERNAME && ADMIN_PUBKEYS.length) throw new Error('That name is reserved.');
+  const pwErr = passwordProblem(password, un); if(pwErr) throw new Error(pwErr);
+  if(authBusy) throw new Error('Please wait for the current request to finish.');
+  authBusy = true;
+  try{
+    if((await collectClaims(un)).length > 0) throw new Error('That name is unavailable.');
+    const sk = await randomBytes(32), pubkey = getPublicKey(sk), code = newRecoveryCode();
+    await publishRecord(sk, un, password, code, null);
+    await sleep(2500);
+    const others = (await collectClaims(un)).filter(c=>c.pubkey!==pubkey).length;
+    return {secretKey:sk, pubkey, username:un, tag:tagOf(pubkey), recoveryCode:code, conflict: others>0};
+  } finally { authBusy = false; }
+}
+async function loginWithPassword(handle, password){
+  if(authBusy) return {ok:false, reason:'busy'};
+  const {name, hint} = parseHandle(handle);
+  const wait = throttleWait('login', name);
+  if(wait > 0) return {ok:false, reason:'throttled', wait};
+  authBusy = true;
+  try{
+    let found = null, attempts = 0;
+    if(!name || name.length > 40 || typeof password!=='string' || !password || password.length > 200){ await dummyKdf(); }
+    else {
+      const pick = pickCandidates(name, hint, await collectClaims(name));
+      if(pick.length === 0) await dummyKdf();
+      for(const c of pick){
+        if(found || attempts >= KDF_BUDGET) break;
+        attempts++;
+        const sk = await openEnc(password, c.newest.data.encByPassword);
+        if(!sk) continue;
+        let pk; try{ pk = getPublicKey(sk); }catch(e){ continue; }
+        if(pk === c.pubkey) found = {ok:true, secretKey:sk, pubkey:pk, username:name, tag:tagOf(pk)};
+      }
+    }
+    if(!found){ throttleFail('login', name); return {ok:false, reason:'bad'}; }
+    throttleOk('login', name);
+    return found;
+  } finally { authBusy = false; }
+}
+async function recoverWithCode(handle, codeRaw, newPassword){
+  if(authBusy) return {ok:false, reason:'busy'};
+  const {name, hint} = parseHandle(handle);
+  const wait = throttleWait('recover', name);
+  if(wait > 0) return {ok:false, reason:'throttled', wait};
+  const pwErr = passwordProblem(newPassword, name);
+  if(pwErr) return {ok:false, reason:'weak', message:pwErr};
+  authBusy = true;
+  try{
+    const code = normalizeRecovery(codeRaw);
+    let found = null;
+    if(code && name && name.length <= 40){
+      for(const c of pickCandidates(name, hint, await collectClaims(name))){
+        const sk = await openRecoveryEnc(code, c.newest.data.encByRecovery);
+        if(!sk) continue;
+        let pk; try{ pk = getPublicKey(sk); }catch(e){ continue; }
+        if(pk === c.pubkey){ found = {sk, pk, ids:c.ids, ts:c.newest.ev.created_at}; break; }
+      }
+    } else { await sleep(50); }
+    if(!found){ throttleFail('recover', name); return {ok:false, reason:'bad'}; }
+    throttleOk('recover', name);
+    const newCode = newRecoveryCode();
+    await publishRecord(found.sk, name, newPassword, newCode, found.ids, found.ts);
+    return {ok:true, secretKey:found.sk, pubkey:found.pk, username:name, tag:tagOf(found.pk), recoveryCode:newCode};
+  } finally { authBusy = false; }
+}
+async function changePassword(oldPassword, newPassword){
+  if(!ME) return {ok:false, reason:'bad'};
+  const pwErr = passwordProblem(newPassword, ME.username);
+  if(pwErr) return {ok:false, reason:'weak', message:pwErr};
+  const chk = await loginWithPassword(ME.username + '#' + ME.pubkey.slice(0,16), oldPassword);
+  if(!chk.ok || chk.pubkey !== ME.pubkey) return {ok:false, reason: chk.reason||'bad', wait: chk.wait};
+  authBusy = true;
+  try{
+    const c = (await collectClaims(ME.username)).find(x=>x.pubkey===ME.pubkey);
+    const code = newRecoveryCode();
+    await publishRecord(ME.secretKey, ME.username, newPassword, code, c?c.ids:null, c?c.newest.ev.created_at:0);
+    return {ok:true, recoveryCode:code};
+  } finally { authBusy = false; }
+}
+
+// ---- reliable outbox ----
+const outboxKey = 'chancellor_outbox';
+let outbox = (lsGet(outboxKey, []) || []).filter(x=>x && x.event && Array.isArray(x.done)).map(x=>({event:x.event, done:x.done, state:{}}));
+let pumping = false, pumpAgain = false, onOutboxChange = null;
+function saveOutbox(){ lsSet(outboxKey, outbox.slice(-60)); }
+function withTimeout(p, ms){ return new Promise((res, rej)=>{ const t = setTimeout(()=>rej(new Error('timeout')), ms); p.then(v=>{ clearTimeout(t); res(v); }, e=>{ clearTimeout(t); rej(e); }); }); }
+async function sendToRelay(event, url){
+  try{ const relay = await withTimeout(pool.ensureRelay(url), 8000); await withTimeout(relay.publish(event), 10000); return true; }
+  catch(e){ return /duplicate/i.test(String((e && e.message) || e)); }
+}
+function publishEverywhere(event){ const item = {event, done:[], state:{}}; outbox.push(item); saveOutbox(); pumpOutbox(); return item; }
+function pendingFor(item){ return RELAYS.filter(u=>!item.done.includes(u) && !(item.state[u] && item.state[u].gave)); }
+async function pumpOutbox(){
+  if(pumping){ pumpAgain = true; return; }
+  pumping = true;
+  try{
+    const jobs = [], now = Date.now();
+    outbox.forEach(item=>{ RELAYS.forEach(url=>{
+      if(item.done.includes(url)) return;
+      const st = item.state[url] || {tries:0, next:0}; item.state[url] = st;
+      if(st.gave || st.next>now) return;
+      jobs.push((async ()=>{
+        if(await sendToRelay(item.event, url)){ if(!item.done.includes(url)) item.done.push(url); }
+        else { st.tries++; st.next = Date.now() + Math.min(300000, 3000*Math.pow(2, st.tries)); if(st.tries>=8) st.gave = true; }
+      })());
+    }); });
+    await Promise.all(jobs);
+    outbox = outbox.filter(item=>pendingFor(item).length>0);
+    saveOutbox();
+    if(onOutboxChange) onOutboxChange();
+  } finally { pumping = false; if(pumpAgain){ pumpAgain = false; pumpOutbox(); } }
+}
+async function waitForAck(item, ms){
+  const end = Date.now() + ms;
+  while(Date.now() < end){ if(item.done.length>0) return true; if(pendingFor(item).length===0) return false; await sleep(200); }
+  return item.done.length>0;
+}
+
+let ME = null;
+let READONLY = true;
+
+const relayStatus = {}; RELAYS.forEach(r=>relayStatus[r]=false);
+const relayFails = {}; RELAYS.forEach(r=>relayFails[r]=0);
+function renderStatus(){
+  const n = Object.values(relayStatus).filter(Boolean).length;
+  const dot = document.getElementById('statusDot');
+  if(!dot) return;
+  dot.classList.toggle('down', n===0);
+  dot.title = n===0 ? 'No relays are currently reachable.' : (n + ' of ' + RELAYS.length + ' relays connected');
+}
+async function connectRelay(url){
+  try{
+    const r = await pool.ensureRelay(url);
+    relayStatus[url]=true; relayFails[url]=0;
+    r.onclose = ()=>{ relayStatus[url]=false; renderStatus(); scheduleReconnect(url); };
+  }catch(e){ relayStatus[url]=false; scheduleReconnect(url); }
+  renderStatus();
+}
+function scheduleReconnect(url){
+  relayFails[url]++;
+  setTimeout(()=>connectRelay(url), Math.min(30000, 1000*Math.pow(2, relayFails[url])));
+}
+RELAYS.forEach(connectRelay);
+
+function isSquareImage(url){
+  return new Promise(resolve=>{
+    const img = new Image();
+    img.onload = ()=>resolve(img.naturalWidth>0 && img.naturalWidth===img.naturalHeight);
+    img.onerror = ()=>resolve(false);
+    img.src = url;
+  });
+}
+
+const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif|bmp)$/i;
+const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogv)$/i;
+function validImageUrl(u){ try{ const p = new URL(u); return p.protocol==='https:' && p.hostname===IMG_HOST && IMAGE_EXT.test(p.pathname); }catch(e){ return false; } }
+function validVideoUrl(u){ try{ const p = new URL(u); return p.protocol==='https:' && p.hostname===IMG_HOST && VIDEO_EXT.test(p.pathname); }catch(e){ return false; } }
+
+/* ===== Moderation + Media Post Approval (MPA) =====
+   Media from non-admin accounts is sealed (NIP-44) to the admin keys. Everyone else sees a gate
+   until an admin signs an approval. Hide / ban / rate-limit are enforced client-side from signed admin events. */
+const modState = {hide:new Map(), ban:new Map(), media:new Map()};
+const approvedHash = new Map();
+const seenModIds = new Set();
+let lastModTs = 0;
+const RATE_WINDOW_SHORT = 60, RATE_MAX_SHORT = 8, RATE_WINDOW_LONG = 600, RATE_MAX_LONG = 20;
+const MAX_POSTS = 30000;
+let rateDirty = true, rateDropped = new Set();
+function isAdminKey(pk){ return ADMIN_PUBKEYS.includes(pk); }
+function isAdmin(){ return !!ME && isAdminKey(ME.pubkey); }
+function setIfNewer(map, key, val, ev, url){
+  const cur = map.get(key);
+  if(cur && (cur.ts > ev.created_at || (cur.ts === ev.created_at && cur.id >= ev.id))) return false;
+  map.set(key, {val, ts:ev.created_at, id:ev.id, url:url || null});
+  return true;
+}
+function addModEvent(e){
+  if(!e || typeof e.id!=='string' || seenModIds.has(e.id)) return false;
+  if(seenModIds.size > 20000) return false;
+  seenModIds.add(e.id);
+  if(!eventShapeOk(e) || e.kind!==MOD_KIND || !isAdminKey(e.pubkey)) return false;
+  try{ if(!verifyEvent(e)) return false; }catch(err){ return false; }
+  if(!e.tags.some(t=>t[0]==='t' && t[1]===MOD_TAG)) return false;
+  const action = (e.tags.find(t=>t[0]==='action')||[])[1];
+  const eT = (e.tags.find(t=>t[0]==='e')||[])[1] || '', pT = (e.tags.find(t=>t[0]==='p')||[])[1] || '', uT = (e.tags.find(t=>t[0]==='url')||[])[1] || '';
+  let ok = false;
+  if((action==='hide'||action==='unhide') && HEX64.test(eT)){ setIfNewer(modState.hide, eT, action==='hide', e); ok = true; }
+  else if((action==='ban'||action==='unban') && HEX64.test(pT)){ setIfNewer(modState.ban, pT, action==='ban', e); ok = true; }
+  else if((action==='approve'||action==='reject') && HEX64.test(eT)){
+    const url = action==='approve' && uT && (validImageUrl(uT) || validVideoUrl(uT)) ? uT : null;
+    if(action==='approve' && !url) return false;
+    const prev = modState.media.get(eT);
+    if(setIfNewer(modState.media, eT, action==='approve' ? 'approved' : 'rejected', e, url)){
+      if(url) sha256Hex(url).then(h=>{ approvedHash.set(h, url); scheduleRender(); });
+      else if(prev && prev.url) sha256Hex(prev.url).then(h=>{ approvedHash.delete(h); scheduleRender(); });
+    }
+    ok = true;
+  }
+  if(ok && e.created_at>lastModTs) lastModTs = e.created_at;
+  return ok;
+}
+function modPublish(action, targetType, target, extraTags){
+  if(!isAdmin()) return null;
+  const tags = [['t',MOD_TAG],['action',action],[targetType,target]].concat(extraTags || []);
+  const signed = finalizeEvent({kind:MOD_KIND, created_at:Math.max(nowSec(), lastModTs+1), tags, content:'', pubkey:ME.pubkey}, ME.secretKey);
+  addModEvent(signed); publishEverywhere(signed);
+  return signed;
+}
+function onModEvent(e){ if(addModEvent(e)) scheduleRender(); }
+function rateSet(){
+  if(!rateDirty) return rateDropped;
+  rateDirty = false; rateDropped = new Set();
+  const byKey = new Map();
+  posts.forEach(p=>{ let a = byKey.get(p.pubkey); if(!a){ a = []; byKey.set(p.pubkey, a); } a.push(p); });
+  byKey.forEach(list=>{
+    list.sort((a,b)=>a.created_at-b.created_at || (a.id < b.id ? -1 : 1));
+    const kept = []; let s = 0, l = 0;
+    for(const p of list){
+      while(s < kept.length && kept[s].created_at <= p.created_at - RATE_WINDOW_SHORT) s++;
+      while(l < kept.length && kept[l].created_at <= p.created_at - RATE_WINDOW_LONG) l++;
+      if(kept.length - s >= RATE_MAX_SHORT || kept.length - l >= RATE_MAX_LONG){ rateDropped.add(p.id); continue; }
+      kept.push(p);
+    }
+  });
+  return rateDropped;
+}
+function selfHidden(p){ const h = modState.hide.get(p.id); return !!(h && h.val); }
+function banned(p){ const b = modState.ban.get(p.pubkey); return !!(b && b.val) && !isAdminKey(p.pubkey); }
+function limited(p){ return rateSet().has(p.id); }
+function isHiddenPost(p){
+  if(selfHidden(p) || banned(p) || limited(p)) return true;
+  const pid = replyParent(p);
+  if(pid){ const r = posts.get(pid); if(r && (selfHidden(r) || banned(r) || limited(r))) return true; }
+  return false;
+}
+function visible(p){ return isAdmin() || !isHiddenPost(p); }
+function hiddenReason(p){ return selfHidden(p) ? '[hidden]' : (banned(p) ? '[user banned]' : (limited(p) ? '[rate-limited]' : '[thread hidden]')); }
+
+const mediaSubs = new Map();
+let sealOk = null, mediaProcessed = 0, mediaHandle = null;
+function nip44api(){ const m = NT.nip44; return m ? (m.v2 || m) : null; }
+function convKey(sk, pk){ const a = nip44api(); return ((a.utils && a.utils.getConversationKey) || a.getConversationKey)(sk, pk); }
+async function sealTo(sk, pk, text){ return nip44api().encrypt(text, convKey(sk, pk)); }
+async function openSeal(sk, pk, payload){ return nip44api().decrypt(payload, convKey(sk, pk)); }
+async function sealCapable(){
+  if(sealOk !== null) return sealOk;
+  try{
+    const a = await randomBytes(32), b = await randomBytes(32), msg = 'chancellor-seal-selftest';
+    sealOk = (await openSeal(b, getPublicKey(a), await sealTo(a, getPublicKey(b), msg))) === msg;
+  }catch(e){ sealOk = false; }
+  return sealOk;
+}
+async function onMediaEvent(e){
+  if(!ME || mediaProcessed > 2000) return;
+  if(!eventShapeOk(e) || e.kind!==MEDIA_KIND || !inOurNamespace(e)) return;
+  if(!e.tags.some(t=>t[0]==='t' && t[1]===APP_NAMESPACE + '-media')) return;
+  const eT = (e.tags.find(t=>t[0]==='e')||[])[1], pT = (e.tags.find(t=>t[0]==='p')||[])[1];
+  if(!HEX64.test(eT||'') || !HEX64.test(pT||'')) return;
+  const key = eT + ':' + e.pubkey;
+  if(mediaSubs.has(key)) return;
+  let other = null;
+  if(e.pubkey===ME.pubkey) other = pT; else if(isAdmin() && pT===ME.pubkey) other = e.pubkey;
+  if(!other) return;
+  try{ if(!verifyEvent(e)) return; }catch(err){ return; }
+  mediaProcessed++;
+  try{
+    const d = JSON.parse(await openSeal(ME.secretKey, other, e.content));
+    const url = d && d.url;
+    if(typeof url!=='string' || !(validImageUrl(url) || validVideoUrl(url))) return;
+    if(!mediaSubs.has(key)){ mediaSubs.set(key, {url, by:e.pubkey}); scheduleRender(); }
+  }catch(err){}
+}
+async function sealMediaFor(eventId, url){
+  const out = [];
+  for(const apk of ADMIN_PUBKEYS){
+    const content = await sealTo(ME.secretKey, apk, JSON.stringify({url}));
+    out.push(finalizeEvent({kind:MEDIA_KIND, created_at:nowSec(), tags:[['t',APP_NAMESPACE + '-media'],['e',eventId],['p',apk]], content, pubkey:ME.pubkey}, ME.secretKey));
+  }
+  return out;
+}
+async function subscribeMedia(){
+  if(mediaHandle){ try{ mediaHandle.close(); }catch(e){} mediaHandle = null; }
+  if(!ME || !(await sealCapable())) return;
+  const filters = [{kinds:[MEDIA_KIND], authors:[ME.pubkey], limit:200}];
+  if(isAdmin()) filters.push({kinds:[MEDIA_KIND], '#p':[ME.pubkey], limit:500});
+  mediaHandle = pool.subscribeMany(RELAYS, filters, {onevent: onMediaEvent});
+}
+function hasMedia(e){
+  if(e.tags.some(t=>t[0]==='media')) return true;
+  return isAdminKey(e.pubkey) && e.tags.some(t=>(t[0]==='image' && validImageUrl(t[1])) || (t[0]==='video' && validVideoUrl(t[1])));
+}
+function mediaStatus(e){
+  if(!hasMedia(e)) return 'none';
+  if(isAdminKey(e.pubkey)) return 'approved';
+  const m = modState.media.get(e.id);
+  return m ? m.val : 'pending';
+}
+function mediaUrl(e){
+  if(isAdminKey(e.pubkey)){ const t = e.tags.find(t=>t[0]==='image'||t[0]==='video'); if(t && (validImageUrl(t[1])||validVideoUrl(t[1]))) return t[1]; }
+  const m = modState.media.get(e.id);
+  if(m && m.val==='approved' && m.url) return m.url;
+  if(!isAdmin() && !(ME && ME.pubkey===e.pubkey)) return null;
+  const s = mediaSubs.get(e.id + ':' + e.pubkey);
+  return s ? s.url : null;
+}
+function mediaVisibleToMe(e){
+  const st = mediaStatus(e);
+  if(st==='none' || !mediaUrl(e)) return false;
+  if(st==='approved' || isAdmin()) return true;
+  return st==='pending' && !!ME && ME.pubkey===e.pubkey;
+}
+function mediaBlock(e){
+  const st = mediaStatus(e); if(st==='none') return null;
+  const wrap = el('div');
+  if(!mediaVisibleToMe(e)){ wrap.appendChild(el('div',{class:'mediaGate'}, st==='rejected' ? 'Media removed by a moderator' : 'Media awaiting moderator approval')); return wrap; }
+  const url = mediaUrl(e);
+  if(validVideoUrl(url)) wrap.appendChild(el('video',{class:'pvid', src:url, controls:'', preload:'metadata', playsinline:''}));
+  else wrap.appendChild(el('img',{class:'pimg', src:url, alt:'post image', referrerpolicy:'no-referrer'}));
+  if(st!=='approved') wrap.appendChild(el('div',{class:'pendingTag'}, st==='rejected' ? 'Rejected' : (isAdmin() ? 'Pending your approval' : 'Pending approval: only you and moderators can see this')));
+  return wrap;
+}
+function avatarUrlOf(prof){
+  if(!prof || !prof.pk) return '';
+  if(prof.direct && isAdminKey(prof.pk) && validImageUrl(prof.direct)) return prof.direct;
+  if(!prof.avh) return '';
+  const u = approvedHash.get(prof.avh); if(u) return u;
+  const m = modState.media.get(prof.avatarEvt);
+  if(m && m.val==='rejected') return '';
+  if(prof.avatarEvt && (isAdmin() || (ME && ME.pubkey===prof.pk))){ const s = mediaSubs.get(prof.avatarEvt + ':' + prof.pk); if(s) return s.url; }
+  return '';
+}
+function approvalTags(e){ const u = mediaUrl(e); return u ? [['url', u]] : []; }
+function modTools(p){
+  const box = el('span',{class:'modTools'});
+  const add = (label, fn)=>{ const a = el('a',{}, label); a.onclick = ()=>{ fn(); applyView(); }; box.appendChild(a); };
+  if(isHiddenPost(p)) box.appendChild(el('b',{style:'color:#a00;margin-right:6px'}, hiddenReason(p)));
+  if(selfHidden(p)) add('[Unhide]', ()=>modPublish('unhide','e',p.id)); else add('[Hide]', ()=>modPublish('hide','e',p.id));
+  if(!isAdminKey(p.pubkey)){
+    if(banned(p)) add('[Unban]', ()=>modPublish('unban','p',p.pubkey));
+    else add('[Ban user]', ()=>{ if(confirm('Hide every post from this account for all visitors?')) modPublish('ban','p',p.pubkey); });
+    const ms = mediaStatus(p);
+    if(ms!=='none'){
+      if(ms!=='approved') add('[Approve media]', ()=>modPublish('approve','e',p.id, approvalTags(p)));
+      if(ms!=='rejected') add('[Reject media]', ()=>modPublish('reject','e',p.id));
+    }
+  }
+  return box;
+}
+function pendingPosts(){ return Array.from(posts.values()).filter(p=>hasMedia(p) && !isAdminKey(p.pubkey) && mediaStatus(p)==='pending' && !isHiddenPost(p)).sort((a,b)=>a.created_at-b.created_at); }
+function pendingAvatars(){
+  const out = [];
+  profiles.forEach((pr,pk)=>{
+    if(!pr.avatarEvt || !pr.avh || isAdminKey(pk) || approvedHash.has(pr.avh)) return;
+    const m = modState.media.get(pr.avatarEvt); if(m && m.val==='rejected') return;
+    out.push({pk, pr});
+  });
+  return out;
+}
+function renderAdmin(){
+  const box = document.getElementById('adminPending'); box.textContent = '';
+  const row = (who, label, url, onApprove, onReject, onBan)=>{
+    const r = el('div',{class:'pend'});
+    if(url){ r.appendChild(validVideoUrl(url) ? el('video',{src:url, controls:'', preload:'metadata'}) : el('img',{src:url, alt:'pending', referrerpolicy:'no-referrer'})); }
+    else r.appendChild(el('div',{class:'mediaGate'}, 'Decrypting…'));
+    const body = el('div'); body.appendChild(el('div',{}, label + ' by ' + who)); if(url) body.appendChild(el('div',{class:'small'}, url));
+    const a = el('button',{class:'btn green', type:'button'}, 'Approve'); a.onclick = ()=>{ onApprove(); applyView(); };
+    const rj = el('button',{class:'btn alt', type:'button', style:'margin-left:6px'}, 'Reject'); rj.onclick = ()=>{ onReject(); applyView(); };
+    const bn = el('button',{class:'btn alt', type:'button', style:'margin-left:6px'}, 'Ban user'); bn.onclick = ()=>{ if(confirm('Hide every post from this account?')){ onBan(); applyView(); } };
+    const act = el('div',{style:'margin-top:6px'}); act.appendChild(a); act.appendChild(rj); act.appendChild(bn); body.appendChild(act);
+    r.appendChild(body); box.appendChild(r);
+  };
+  const pp = pendingPosts(), pa = pendingAvatars();
+  pp.forEach(p=>row(displayName(p.pubkey), 'Post media', mediaUrl(p), ()=>modPublish('approve','e',p.id,approvalTags(p)), ()=>modPublish('reject','e',p.id), ()=>modPublish('ban','p',p.pubkey)));
+  pa.forEach(({pk,pr})=>{ const s = mediaSubs.get(pr.avatarEvt+':'+pk); const url = s ? s.url : null;
+    row(displayName(pk), 'Profile picture', url, ()=>url && modPublish('approve','e',pr.avatarEvt,[['url',url]]), ()=>modPublish('reject','e',pr.avatarEvt), ()=>modPublish('ban','p',pk)); });
+  if(!pp.length && !pa.length) box.appendChild(el('div',{class:'small'}, 'Nothing is waiting for approval.'));
+}
+
+const posts = new Map();
+const reactions = new Map();
+const reshares = new Map();
+const profiles = new Map();
+const communities = new Map();
+const followListsByUser = new Map();
+const communityListsByUser = new Map();
+let following = [];
+let joinedCommunities = [];
+let currentSection = 'home';
+let currentTab = 'all';
+let profileSubtab = 'posts';
+let searchQuery = '';
+let viewingPubkey = null;
+
+function el(tag, attrs, text){
+  const n = document.createElement(tag);
+  if(attrs) for(const k in attrs){ if(k==='class') n.className=attrs[k]; else n.setAttribute(k,attrs[k]); }
+  if(text!==undefined) n.textContent = text;
+  return n;
+}
+const ICON_PATHS = {
+  search:'M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5zM9.5 14A4.5 4.5 0 1 1 9.5 5a4.5 4.5 0 0 1 0 9z',
+  home:'M12 3.1 3 10.5V21h6v-6h6v6h6V10.5z',
+  person:'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2.5c-4.42 0-9 2.19-9 5V22h18v-2.5c0-2.81-4.58-5-9-5z',
+  photo:'M20 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zM8.5 12.5l2.6 3.13L14.7 11l4.8 6H4.5z',
+  people:'M16.5 11a2.99 2.99 0 1 0 0-6 2.99 2.99 0 0 0 0 6zM8 11a2.99 2.99 0 1 0 0-6 2.99 2.99 0 0 0 0 6zm8.5 2c-1.83 0-5.5.92-5.5 2.75V19h11v-3.25C22 14.92 18.33 13 16.5 13zM8 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.27 2.37-3.35A9.6 9.6 0 0 0 8 13z',
+  video:'M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z',
+  text:'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'
+};
+function iconEl(name, size){
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 24 24');
+  svg.setAttribute('width', size||16); svg.setAttribute('height', size||16);
+  svg.setAttribute('fill','currentColor');
+  svg.style.verticalAlign='middle'; svg.style.flexShrink='0';
+  const p=document.createElementNS(NS,'path'); p.setAttribute('d', ICON_PATHS[name]);
+  svg.appendChild(p);
+  return svg;
+}
+function initIcons(){ document.querySelectorAll('[data-icon]').forEach(node=>{ node.textContent=''; node.appendChild(iconEl(node.dataset.icon, ['text','photo','video'].includes(node.dataset.icon)?24:16)); }); }
+function ensureProfile(pubkey, username, tag){
+  if(!profiles.has(pubkey)) profiles.set(pubkey, {pk:pubkey, username, tag, displayName:username, bio:'', avh:'', avatarEvt:'', direct:''});
+}
+function isReply(e){ return e.tags.some(t=>t[0]==='e' && t[3]==='reply'); }
+function replyParent(e){ const t=e.tags.find(t=>t[0]==='e'&&t[3]==='reply'); return t?t[1]:null; }
+function sortNewest(a,b){ if(b.created_at!==a.created_at) return b.created_at-a.created_at; return a.id<b.id?1:-1; }
+function fmtDate(t){ return new Date(t*1000).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
+function fmtDateTime(t){ return new Date(t*1000).toLocaleString(); }
+function slugify(name){ return name.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || ('c'+Date.now()); }
+function followerCount(pubkey){ let n=0; followListsByUser.forEach(v=>{ if(v.list.includes(pubkey)) n++; }); return n; }
+function communityMemberCount(slug){
+  const set = new Set();
+  communityListsByUser.forEach((v,pk)=>{ if(v.list.includes(slug)) set.add(pk); });
+  const c = communities.get(slug); if(c) set.add(c.pubkey);
+  return set.size;
+}
+function tileColor(slug){
+  const colors=['#7bc9a0','#6fa8dc','#e08f7d','#e6b84f','#a58bd0','#5fb8b0'];
+  let h=0; for(const ch of slug) h=(h*31+ch.charCodeAt(0))>>>0;
+  return colors[h%colors.length];
+}
+function avatarEl(prof, size){
+  const box = el('div',{class:'avatar'});
+  if(size){ box.style.width=size+'px'; box.style.height=size+'px'; }
+  const av = avatarUrlOf(prof);
+  if(av) box.appendChild(el('img',{src:av, alt:'avatar', referrerpolicy:'no-referrer'}));
+  else box.appendChild(iconEl('person', Math.round((size||36)*0.6)));
+  return box;
+}
+function displayName(pubkey){ const p=profiles.get(pubkey); return p?(p.displayName||p.username):'unknown'; }
+
+function renderPhotos(){
+  const grid = document.getElementById('photoGrid');
+  grid.textContent = '';
+  let authorFilter = viewingPubkey || (ME ? ME.pubkey : null);
+  let list = Array.from(posts.values());
+  if(authorFilter) list = list.filter(e=>e.pubkey===authorFilter);
+  const imgs = [];
+  list.filter(visible).sort(sortNewest).forEach(e=>{
+    if(!mediaVisibleToMe(e)) return;
+    const u = mediaUrl(e);
+    if(u && validImageUrl(u)) imgs.push(u);
+  });
+  if(imgs.length===0){ grid.appendChild(el('div',{class:'photo-grid-empty'},'No photos yet.')); return; }
+  imgs.forEach(u=>{
+    const cell = el('div',{class:'photo-cell'});
+    const img = el('img',{src:u, alt:'photo', referrerpolicy:'no-referrer'});
+    img.onclick = ()=>window.open(u,'_blank');
+    cell.appendChild(img);
+    grid.appendChild(cell);
+  });
+}
+
+function notificationList(){
+  if(!ME) return [];
+  const items = [];
+  reactions.forEach((m, postId)=>{
+    const p = posts.get(postId);
+    if(p && p.pubkey===ME.pubkey){
+      m.forEach(ev=>{ if(ev.pubkey!==ME.pubkey) items.push({time:ev.created_at, text:displayName(ev.pubkey)+' gave +1 to your post', postId}); });
+    }
+  });
+  reshares.forEach(ev=>{
+    const postId = (ev.tags.find(t=>t[0]==='e')||[])[1];
+    const p = posts.get(postId);
+    if(p && p.pubkey===ME.pubkey && ev.pubkey!==ME.pubkey) items.push({time:ev.created_at, text:displayName(ev.pubkey)+' shared your post', postId});
+  });
+  posts.forEach(ev=>{
+    const parentId = replyParent(ev);
+    if(parentId){
+      const p = posts.get(parentId);
+      if(p && p.pubkey===ME.pubkey && ev.pubkey!==ME.pubkey) items.push({time:ev.created_at, text:displayName(ev.pubkey)+' commented on your post', postId:parentId});
+    }
+  });
+  return items.sort((a,b)=>b.time-a.time);
+}
+function renderBell(){
+  const badge = document.getElementById('bellBtn');
+  if(!ME){ badge.classList.add('hidden'); return; }
+  const seen = lsGet('chancellor_notif_seen_'+ME.username, 0);
+  const unread = notificationList().filter(i=>i.time>seen).length;
+  document.getElementById('bellCount').textContent = unread;
+  badge.classList.remove('hidden');
+}
+
+function renderComments(parentId){
+  const kids = Array.from(posts.values()).filter(c=>replyParent(c)===parentId && visible(c)).sort((a,b)=>a.created_at-b.created_at);
+  const frag = document.createDocumentFragment();
+  kids.forEach(c=>{
+    const prof = profiles.get(c.pubkey);
+    const row = el('div',{class:'comment', id:'p-'+c.id});
+    row.appendChild(avatarEl(prof, 28));
+    const body = el('div');
+    const head = el('div',{class:'comment-head'});
+    const nm = el('b',{}, displayName(c.pubkey)); nm.style.cursor='pointer'; nm.onclick=()=>viewProfile(c.pubkey);
+    head.appendChild(nm);
+    head.appendChild(el('span',{}, fmtDateTime(c.created_at)));
+    body.appendChild(head);
+    body.appendChild(el('div',{class:'comment-text'}, c.content));
+    const sub = renderComments(c.id);
+    if(sub.childNodes.length){ const w = el('div',{class:'comment-replies'}); w.appendChild(sub); body.appendChild(w); }
+    row.appendChild(body);
+    frag.appendChild(row);
+  });
+  return frag;
+}
+
+function renderPost(e, noId){
+  const wrap = el('div',{class:'post'});
+  if(!noId) wrap.id = 'p-'+e.id;
+  const main = el('div',{class:'post-main'});
+  const prof = profiles.get(e.pubkey);
+  const head = el('div',{class:'post-head'});
+  head.appendChild(avatarEl(prof, 46));
+  const who = el('div');
+  const uname = el('div',{class:'uname'}, displayName(e.pubkey));
+  uname.onclick = ()=>viewProfile(e.pubkey);
+  who.appendChild(uname);
+  who.appendChild(el('div',{class:'meta'}, 'Shared publicly - ' + fmtDate(e.created_at) + (prof?(' - '+prof.tag):'')));
+  head.appendChild(who);
+  if(isAdmin()) head.appendChild(modTools(e));
+  main.appendChild(head);
+  if(e.content) main.appendChild(el('div',{class:'post-body'}, e.content));
+  const mb = mediaBlock(e); if(mb) main.appendChild(mb);
+  wrap.appendChild(main);
+
+  const reshareCount = Array.from(reshares.values()).filter(r=>(r.tags.find(t=>t[0]==='e')||[])[1]===e.id).length;
+  const likeCount = (reactions.get(e.id)||new Map()).size;
+  const iReacted = ME && (reactions.get(e.id)||new Map()).has(ME.pubkey);
+  const footer = el('div',{class:'post-footer'});
+  const plusBtn = el('button',{class:'plusBtn'+(iReacted?' reacted':''), title:'+1'}, '+' + (likeCount||''));
+  plusBtn.onclick = ()=>react(e.id);
+  footer.appendChild(plusBtn);
+  const commentInput = el('input',{type:'text', class:'commentInline', placeholder: ME ? 'Add a comment...' : 'Log in to comment'});
+  if(!ME) commentInput.disabled = true;
+  commentInput.onkeydown = async (ev)=>{
+    if(ev.key==='Enter' && commentInput.value.trim()){
+      const val = commentInput.value; commentInput.value=''; commentInput.disabled=true;
+      await publishPost(val, null, e.id); commentInput.disabled=false;
+    }
+  };
+  footer.appendChild(commentInput);
+  const shareBtn = el('button',{class:'link'}, 'Share' + (reshareCount?(' ('+reshareCount+')'):''));
+  shareBtn.onclick = ()=>reshare(e.id);
+  footer.appendChild(shareBtn);
+  wrap.appendChild(footer);
+
+  const cm = renderComments(e.id);
+  if(cm.childNodes.length){ const box = el('div',{class:'comments'}); box.appendChild(cm); wrap.appendChild(box); }
+  return wrap;
+}
+function jumpTo(id){
+  const node = document.getElementById('p-'+id); if(!node) return;
+  node.scrollIntoView({behavior:'smooth', block:'center'});
+  node.classList.add('highlight'); setTimeout(()=>node.classList.remove('highlight'), 1500);
+}
+
+function renderFeed(){
+  renderBell();
+  const colRight = document.getElementById('colRight');
+  Array.from(colRight.querySelectorAll('.post')).forEach(n=>n.remove());
+  let list = Array.from(posts.values()).filter(visible);
+  if(viewingPubkey) list = list.filter(e=>e.pubkey===viewingPubkey);
+  else if(currentTab==='following') list = list.filter(e=> following.includes(e.pubkey) || (ME && e.pubkey===ME.pubkey));
+  if(searchQuery){
+    const q = searchQuery.toLowerCase();
+    list = list.filter(e=>{
+      const prof = profiles.get(e.pubkey);
+      const uname = (prof?prof.username+' '+prof.tag:'').toLowerCase();
+      return uname.includes(q) || e.content.toLowerCase().includes(q) || e.id.toLowerCase().includes(q);
+    });
+  }
+  const roots = list.filter(e=>!isReply(e)).sort(sortNewest);
+  const emptyMsg = document.getElementById('feedEmpty');
+  if(roots.length===0){ emptyMsg.textContent='No posts yet.'; emptyMsg.classList.remove('hidden'); return; }
+  emptyMsg.classList.add('hidden');
+  roots.forEach(e=>colRight.appendChild(renderPost(e)));
+}
+function renderHotCard(){
+  const box = document.getElementById('hotPosts');
+  box.textContent = '';
+  const all = Array.from(posts.values()).filter(visible);
+  const scored = all.filter(e=>!isReply(e)).map(e=>{
+    const likes = (reactions.get(e.id)||new Map()).size;
+    const comments = all.filter(c=>replyParent(c)===e.id).length;
+    const shares = Array.from(reshares.values()).filter(r=>(r.tags.find(t=>t[0]==='e')||[])[1]===e.id).length;
+    return {e, score: likes*2 + comments*3 + shares*2};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
+  if(scored.length===0){ box.appendChild(el('div',{class:'small'},'Nothing is hot yet. +1 or comment on a post to get things started.')); return; }
+  scored.forEach(x=>box.appendChild(renderPost(x.e, true)));
+}
+function renderFollowList(){
+  const c = document.getElementById('followList'); c.textContent='';
+  if(following.length===0){ c.textContent='None yet.'; return; }
+  following.forEach(pk=>{
+    const row = el('div',{class:'follow-row'});
+    row.appendChild(el('span',{}, displayName(pk)));
+    const btn = el('button',{class:'link'}, 'Unfollow'); btn.onclick=()=>toggleFollow(pk);
+    row.appendChild(btn); c.appendChild(row);
+  });
+}
+
+function renderProfileBanner(pubkey){
+  const b = document.getElementById('profileBanner');
+  b.textContent='';
+  b.className = 'profile-banner';
+  const prof = profiles.get(pubkey);
+  const left = el('div',{class:'pb-left'});
+  left.appendChild(avatarEl(prof, 96));
+  left.appendChild(el('div',{class:'pb-name'}, displayName(pubkey)));
+  left.appendChild(el('div',{class:'pb-follow'}, followerCount(pubkey) + ' followers'));
+  if(ME && pubkey!==ME.pubkey){
+    const fbtn = el('button',{class:'btn alt'}, following.includes(pubkey)?'Unfollow':'Follow');
+    fbtn.onclick = ()=>toggleFollow(pubkey);
+    left.appendChild(fbtn);
+  }
+  const back = el('button',{class:'link'}, 'Back to feed');
+  back.style.color = '#cfe8d4';
+  back.onclick = ()=>{ viewingPubkey=null; profileSubtab='posts'; applyView(); };
+  left.appendChild(back);
+  b.appendChild(left);
+  const right = el('div',{class:'pb-right'});
+  right.appendChild(el('div',{class:'hill h3'}));
+  right.appendChild(el('div',{class:'hill h1'}));
+  right.appendChild(el('div',{class:'hill h2'}));
+  b.appendChild(right);
+}
+function renderProfileTabs(){
+  const bar = document.getElementById('profileTabsBar');
+  bar.textContent='';
+  bar.className = 'profile-tabsbar';
+  [['about','About'],['posts','Posts'],['photos','Photos']].forEach(([key,label])=>{
+    const btn = el('button',{}, label);
+    if(key===profileSubtab) btn.classList.add('active');
+    btn.onclick = ()=>{ profileSubtab=key; applyView(); };
+    bar.appendChild(btn);
+  });
+}
+function renderAbout(pubkey){
+  const isOwn = !!(ME && pubkey===ME.pubkey);
+  document.getElementById('aboutOwnControls').classList.toggle('hidden', !isOwn);
+  const view = document.getElementById('aboutBioView');
+  view.classList.toggle('hidden', isOwn);
+  if(!isOwn){
+    const prof = profiles.get(pubkey);
+    view.textContent = prof && prof.bio ? prof.bio : 'No bio yet.';
+  } else {
+    const prof = profiles.get(pubkey) || {};
+    if(document.activeElement && document.getElementById('aboutOwnControls').contains(document.activeElement)) { renderFollowList(); return; }
+    document.getElementById('profDisplay').value = prof.displayName || '';
+    document.getElementById('profBio').maxLength = 300;
+    document.getElementById('profBio').value = prof.bio || '';
+    { const s = prof.avatarEvt ? mediaSubs.get(prof.avatarEvt+':'+ME.pubkey) : null; document.getElementById('profAvatar').value = prof.direct || (s ? s.url : ''); }
+    renderFollowList();
+  }
+}
+
+function communityTile(slug, c){
+  const tile = el('div',{class:'community-tile'});
+  const banner = el('div',{class:'community-banner'});
+  banner.style.background = tileColor(slug);
+  banner.appendChild(iconEl('people', 64));
+  tile.appendChild(banner);
+  const body = el('div',{class:'community-body'});
+  body.appendChild(el('div',{class:'community-name'}, c.name));
+  if(c.description) body.appendChild(el('div',{class:'community-meta'}, c.description));
+  body.appendChild(el('div',{class:'community-meta'}, communityMemberCount(slug) + ' members'));
+  const isJoined = joinedCommunities.includes(slug);
+  const btn = el('button',{class:'btn alt'}, isJoined ? 'Leave' : 'Join');
+  btn.onclick = ()=>toggleJoinCommunity(slug);
+  body.appendChild(btn);
+  tile.appendChild(body);
+  return tile;
+}
+function renderCommunities(){
+  const joinedGrid = document.getElementById('communityJoinedGrid');
+  const allGrid = document.getElementById('communityAllGrid');
+  joinedGrid.textContent=''; allGrid.textContent='';
+  const entries = Array.from(communities.entries()).sort((a,b)=>b[1].created_at-a[1].created_at);
+  const joined = entries.filter(([slug])=>joinedCommunities.includes(slug));
+  if(joined.length===0) joinedGrid.appendChild(el('div',{class:'small'}, ME ? 'You have not joined any communities yet.' : 'Log in to join communities.'));
+  joined.forEach(([slug,c])=>joinedGrid.appendChild(communityTile(slug,c)));
+  if(entries.length===0) allGrid.appendChild(el('div',{class:'small'},'No communities yet. Create the first one above.'));
+  entries.forEach(([slug,c])=>allGrid.appendChild(communityTile(slug,c)));
+}
+
+function applyView(){
+  const adminOn = currentSection==='admin' && isAdmin();
+  document.getElementById('adminPanel').classList.toggle('hidden', !adminOn);
+  if(adminOn){
+    ['board','photosPanel','profileAboutPanel','profileBanner','profileTabsBar','communitiesSection'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+    document.querySelector('nav').classList.add('hidden');
+    renderAdmin(); renderBell(); return;
+  }
+  if(currentSection==='admin') currentSection = 'home';
+  const inCommunities = currentSection==='communities';
+  document.getElementById('communitiesSection').classList.toggle('hidden', !inCommunities);
+  document.querySelector('nav').classList.toggle('hidden', inCommunities);
+  document.getElementById('sectionLabel').textContent = inCommunities ? 'Communities' : 'Home';
+  const board = document.getElementById('board');
+  const photosPanel = document.getElementById('photosPanel');
+  const aboutPanel = document.getElementById('profileAboutPanel');
+  const banner = document.getElementById('profileBanner');
+  const tabsBar = document.getElementById('profileTabsBar');
+  if(inCommunities){
+    [board, photosPanel, aboutPanel, banner, tabsBar].forEach(n=>n.classList.add('hidden'));
+    renderCommunities(); renderBell();
+    return;
+  }
+  const viewingProfile = !!viewingPubkey;
+  banner.classList.toggle('hidden', !viewingProfile);
+  tabsBar.classList.toggle('hidden', !viewingProfile);
+  if(viewingProfile){ renderProfileBanner(viewingPubkey); renderProfileTabs(); }
+  const showAbout = viewingProfile && profileSubtab==='about';
+  const showPhotos = viewingProfile ? profileSubtab==='photos' : currentTab==='photos';
+  const showBoard = !showAbout && !showPhotos;
+  aboutPanel.classList.toggle('hidden', !showAbout);
+  photosPanel.classList.toggle('hidden', !showPhotos);
+  board.classList.toggle('hidden', !showBoard);
+  renderBell();
+  if(showAbout){ renderAbout(viewingPubkey); return; }
+  if(showPhotos){ renderPhotos(); return; }
+  const showCompose = !READONLY && (viewingProfile ? profileSubtab==='posts' : currentTab!=='explore');
+  document.getElementById('composePanel').classList.toggle('hidden', !showCompose);
+  document.getElementById('exploreCard').classList.toggle('hidden', viewingProfile || currentTab!=='all');
+  document.getElementById('hotCard').classList.toggle('hidden', viewingProfile || currentTab!=='explore');
+  if(!viewingProfile && currentTab==='explore') renderHotCard();
+  renderFeed();
+}
+
+async function viewProfile(pubkey){
+  viewingPubkey = pubkey; profileSubtab = 'posts'; currentSection = 'home';
+  document.querySelectorAll('nav button[data-tab]').forEach(x=>x.classList.remove('active'));
+  applyView();
+  try{
+    await pool.subscribeManyEose(RELAYS, [
+      {kinds:[1], "#t":[APP_NAMESPACE], authors:[pubkey], limit:200},
+      {kinds:[30078], "#t":[APP_NAMESPACE], "#d":["chancellor-profile"], authors:[pubkey]}
+    ], { onevent: onAnyEvent });
+  }catch(e){}
+  applyView();
+}
+async function viewProfileByUsername(username){
+  const {name, hint} = parseHandle(username);
+  const pick = (name && name.length<=40) ? pickCandidates(name, hint, await collectClaims(name)) : [];
+  if(!pick.length){ alert('No Chancellor+ account found for that username.'); return; }
+  viewProfile(pick[0].pubkey);
+}
+
+function canPost(content){
+  const state = lsGet('chancellor_antispam', {lastPost:0, times:[], recent:[]});
+  const now = Date.now();
+  if(now - state.lastPost < 8000) return "Please wait a few seconds between posts.";
+  state.times = state.times.filter(t=>now-t < 10*60*1000);
+  if(state.times.length >= 15) return "Posting limit reached, try again later.";
+  if(state.recent.includes(content.trim())) return "Duplicate content blocked.";
+  return null;
+}
+function recordPost(content){
+  const state = lsGet('chancellor_antispam', {lastPost:0, times:[], recent:[]});
+  const now = Date.now();
+  state.lastPost = now; state.times.push(now);
+  state.recent.push(content.trim()); if(state.recent.length>10) state.recent.shift();
+  lsSet('chancellor_antispam', state);
+}
+
+async function publishPost(content, fileUrl, replyTo){
+  if(!ME){ alert('Sign in to post.'); return false; }
+  content = (content||'').trim(); if(!content && !fileUrl) return false;
+  const msg = document.getElementById('composeMsg');
+  const err = canPost(content + (replyTo||'')); if(err){ msg.textContent = err; return false; }
+  const tags = [["t",APP_NAMESPACE],["u",ME.username]];
+  if(replyTo) tags.push(["e", replyTo, "", "reply"]);
+  let sealUrl = null;
+  if(fileUrl){
+    if(!validImageUrl(fileUrl) && !validVideoUrl(fileUrl)){ msg.textContent = 'Invalid file link.'; return false; }
+    if(isAdmin()) tags.push([validVideoUrl(fileUrl) ? 'video' : 'image', fileUrl]);
+    else {
+      if(!ADMIN_PUBKEYS.length || !(await sealCapable())){ msg.textContent = 'Media uploads are unavailable right now. You can still post without a file.'; return false; }
+      tags.push(['media','1']); sealUrl = fileUrl;
+    }
+  }
+  msg.textContent = 'Preparing post…';
+  let signed, envs = [];
+  try{
+    const mined = await minePow({kind:1, created_at:nowSec(), tags, content:content.slice(0,5000), pubkey:ME.pubkey}, POW_BITS);
+    signed = finalizeEvent(mined, ME.secretKey);
+    if(sealUrl) envs = await sealMediaFor(signed.id, sealUrl);
+  }catch(e){ msg.textContent = String((e && e.message) || e); return false; }
+  posts.set(signed.id, signed); rateDirty = true;
+  if(sealUrl) mediaSubs.set(signed.id + ':' + ME.pubkey, {url:sealUrl, by:ME.pubkey});
+  envs.forEach(en=>publishEverywhere(en)); publishEverywhere(signed);
+  recordPost(content + (replyTo||'')); msg.textContent = '';
+  applyView();
+  return true;
+}
+async function react(postId){
+  if(!ME){ alert('Log in to react.'); return; }
+  const m = reactions.get(postId) || new Map();
+  if(m.has(ME.pubkey)) return;
+  const evt = { kind:7, created_at:Math.floor(Date.now()/1000), tags:[["e",postId],["t",APP_NAMESPACE]], content:"+", pubkey: ME.pubkey };
+  const signed = finalizeEvent(evt, ME.secretKey);
+  m.set(ME.pubkey, signed); reactions.set(postId, m);
+  publishEverywhere(signed); applyView();
+}
+async function reshare(postId){
+  if(!ME){ alert('Log in to reshare.'); return; }
+  const orig = posts.get(postId); if(!orig) return;
+  const evt = { kind:6, created_at:Math.floor(Date.now()/1000), tags:[["e",postId],["t",APP_NAMESPACE]], content: '', pubkey: ME.pubkey };
+  const signed = finalizeEvent(evt, ME.secretKey);
+  reshares.set(postId + ':' + ME.pubkey, signed);
+  publishEverywhere(signed); applyView();
+}
+async function saveProfile(){
+  if(!ME){ alert('Sign in to edit your profile.'); return; }
+  const errEl = document.getElementById('profErr'); errEl.textContent='';
+  const dn = cleanName(document.getElementById('profDisplay').value);
+  const bio = document.getElementById('profBio').value.replace(/[\u0000-\u0008\u000b-\u001f\u007f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g,'').trim().slice(0,300);
+  const avatarRaw = document.getElementById('profAvatar').value.trim();
+  const tags = [["d","chancellor-profile"],["t",APP_NAMESPACE]];
+  const content = {username:ME.username, displayName:dn, bio};
+  let sealUrl = null, avh = '';
+  if(avatarRaw){
+    if(!validImageUrl(avatarRaw)){ errEl.textContent='Avatar must be an https://files.catbox.moe/ image link.'; return; }
+    if(!(await isSquareImage(avatarRaw))){ errEl.textContent='Profile pictures must be square (equal width and height).'; return; }
+    if(isAdmin()) content.avatar = avatarRaw;
+    else {
+      if(!ADMIN_PUBKEYS.length || !(await sealCapable())){ errEl.textContent='Profile pictures are unavailable right now.'; return; }
+      avh = await sha256Hex(avatarRaw); tags.push(['avh', avh],['media','1']); sealUrl = avatarRaw;
+    }
+  }
+  const signed = finalizeEvent({kind:30078, created_at:nowSec(), tags, content:JSON.stringify(content), pubkey:ME.pubkey}, ME.secretKey);
+  profiles.set(ME.pubkey, {pk:ME.pubkey, username:ME.username, tag:ME.tag, displayName:dn||ME.username, bio, avh, avatarEvt: sealUrl?signed.id:'', direct: content.avatar||''});
+  if(sealUrl){ mediaSubs.set(signed.id+':'+ME.pubkey, {url:sealUrl, by:ME.pubkey}); (await sealMediaFor(signed.id, sealUrl)).forEach(en=>publishEverywhere(en)); }
+  publishEverywhere(signed);
+  document.getElementById('hdrAvatar').textContent='';
+  document.getElementById('hdrAvatar').appendChild(avatarEl(profiles.get(ME.pubkey), 34));
+  errEl.textContent = sealUrl && !approvedHash.has(avh) ? 'Saved. Your picture is visible only to you until a moderator approves it.' : 'Saved.';
+  applyView();
+}
+async function toggleFollow(pubkey){
+  if(!ME){ alert('Log in to follow.'); return; }
+  if(following.includes(pubkey)) following = following.filter(p=>p!==pubkey);
+  else following.push(pubkey);
+  const evt = { kind:30078, created_at:Math.floor(Date.now()/1000), tags:[["d","chancellor-follows"],["t",APP_NAMESPACE]], content: JSON.stringify(following), pubkey: ME.pubkey };
+  publishEverywhere(finalizeEvent(evt, ME.secretKey));
+  followListsByUser.set(ME.pubkey, {list:following.slice(), created_at:evt.created_at});
+  applyView();
+}
+async function publishJoinedCommunities(){
+  const evt = { kind:30078, created_at:Math.floor(Date.now()/1000), tags:[["d","chancellor-communities"],["t",APP_NAMESPACE]], content: JSON.stringify(joinedCommunities), pubkey: ME.pubkey };
+  publishEverywhere(finalizeEvent(evt, ME.secretKey));
+  communityListsByUser.set(ME.pubkey, {list:joinedCommunities.slice(), created_at:evt.created_at});
+}
+async function toggleJoinCommunity(slug){
+  if(!ME){ alert('Log in to join a community.'); return; }
+  if(joinedCommunities.includes(slug)) joinedCommunities = joinedCommunities.filter(s=>s!==slug);
+  else joinedCommunities.push(slug);
+  await publishJoinedCommunities();
+  applyView();
+}
+async function createCommunity(name, description){
+  const slug = slugify(name);
+  const evt = { kind:COMMUNITY_KIND, created_at:Math.floor(Date.now()/1000), tags:[["d",slug],["t",APP_NAMESPACE]], content: JSON.stringify({name, description}), pubkey: ME.pubkey };
+  publishEverywhere(finalizeEvent(evt, ME.secretKey));
+  communities.set(slug, {name, description, pubkey:ME.pubkey, created_at:evt.created_at});
+  if(!joinedCommunities.includes(slug)) joinedCommunities.push(slug);
+  await publishJoinedCommunities();
+  applyView();
+}
+
+const SLUG = /^[a-z0-9-]{1,60}$/;
+function onAnyEvent(e){
+  if(!eventShapeOk(e) || !inOurNamespace(e)) return;
+  try{ if(!verifyEvent(e)) return; }catch(err){ return; }
+  if(e.kind===1){
+    if(posts.has(e.id) || posts.size >= MAX_POSTS) return;
+    if(leadingZeroBits(e.id) < POW_BITS) return;
+    if(!e.tags.some(t=>t[0]==='t' && t[1]===APP_NAMESPACE)) return;
+    const u = cleanName((e.tags.find(t=>t[0]==='u')||[])[1]);
+    if(!u) return;
+    if(ADMIN_PUBKEYS.length && normUser(u)===ADMIN_USERNAME && !isAdminKey(e.pubkey)) return;
+    if(e.content.length > 5000) return;
+    posts.set(e.id, e); rateDirty = true;
+    ensureProfile(e.pubkey, u, tagOf(e.pubkey));
+  } else if(e.kind===7){
+    const postId = (e.tags.find(t=>t[0]==='e')||[])[1]; if(!HEX64.test(postId||'')) return;
+    const m = reactions.get(postId) || new Map();
+    if(m.has(e.pubkey) && m.get(e.pubkey).created_at >= e.created_at) return;
+    m.set(e.pubkey, e); reactions.set(postId, m);
+  } else if(e.kind===6){
+    const postId = (e.tags.find(t=>t[0]==='e')||[])[1]; if(!HEX64.test(postId||'')) return;
+    reshares.set(postId + ':' + e.pubkey, e);
+  } else if(e.kind===COMMUNITY_KIND){
+    const slug = (e.tags.find(t=>t[0]==='d')||[])[1]; if(!slug || !SLUG.test(slug)) return;
+    try{
+      const c = JSON.parse(e.content); const prev = communities.get(slug);
+      if(!prev || e.created_at>prev.created_at) communities.set(slug, {name:cleanName(c.name||slug).slice(0,60), description:cleanName(c.description||'').slice(0,200), pubkey:e.pubkey, created_at:e.created_at});
+    }catch(err){ return; }
+  } else if(e.kind===30078){
+    const d = (e.tags.find(t=>t[0]==='d')||[])[1];
+    try{
+      if(d==='chancellor-profile'){
+        const c = JSON.parse(e.content) || {};
+        const prev = profiles.get(e.pubkey);
+        if(prev && prev.ts && prev.ts > e.created_at) return;
+        const un = (prev && prev.username) || cleanName(c.username);
+        if(!un) return;
+        if(ADMIN_PUBKEYS.length && normUser(un)===ADMIN_USERNAME && !isAdminKey(e.pubkey)) return;
+        const avh = (e.tags.find(t=>t[0]==='avh')||[])[1] || '';
+        profiles.set(e.pubkey, {pk:e.pubkey, ts:e.created_at, username:un, tag:tagOf(e.pubkey), displayName:cleanName(c.displayName)||un, bio:String(c.bio||'').slice(0,300),
+          avh: HEX64.test(avh)?avh:'', avatarEvt: (HEX64.test(avh) && e.tags.some(t=>t[0]==='media'))?e.id:'', direct: (isAdminKey(e.pubkey) && validImageUrl(c.avatar))?c.avatar:''});
+      } else if(d==='chancellor-follows'){
+        const list = (JSON.parse(e.content) || []); if(!Array.isArray(list)) return;
+        const clean = list.filter(x=>HEX64.test(x||'')).slice(0,500);
+        const prev = followListsByUser.get(e.pubkey);
+        if(!prev || e.created_at>=prev.created_at) followListsByUser.set(e.pubkey, {list:clean, created_at:e.created_at});
+        if(ME && e.pubkey===ME.pubkey) following = clean;
+      } else if(d==='chancellor-communities'){
+        const list = (JSON.parse(e.content) || []); if(!Array.isArray(list)) return;
+        const clean = list.filter(x=>typeof x==='string' && SLUG.test(x)).slice(0,200);
+        const prev = communityListsByUser.get(e.pubkey);
+        if(!prev || e.created_at>=prev.created_at) communityListsByUser.set(e.pubkey, {list:clean, created_at:e.created_at});
+        if(ME && e.pubkey===ME.pubkey) joinedCommunities = clean;
+      } else return;
+    }catch(err){ return; }
+  } else return;
+  scheduleRender();
+}
+let renderTimer = null;
+function scheduleRender(){
+  if(renderTimer) return;
+  renderTimer = setTimeout(()=>{ renderTimer=null; applyView(); }, 120);
+}
+function subscribeAll(){
+  const f = (filter)=>pool.subscribeMany(RELAYS, [filter], {onevent:onAnyEvent});
+  f({kinds:[1], "#t":[APP_NAMESPACE], limit:2000});
+  f({kinds:[7], "#t":[APP_NAMESPACE], limit:2000});
+  f({kinds:[6], "#t":[APP_NAMESPACE], limit:500});
+  f({kinds:[COMMUNITY_KIND], "#t":[APP_NAMESPACE], limit:200});
+  ['chancellor-profile','chancellor-follows','chancellor-communities'].forEach(d=>f({kinds:[30078], "#t":[APP_NAMESPACE], "#d":[d]}));
+  if(ADMIN_PUBKEYS.length) pool.subscribeMany(RELAYS, [{kinds:[MOD_KIND], authors:ADMIN_PUBKEYS, '#t':[MOD_TAG], limit:5000}], {onevent:onModEvent});
+}
+
+function authMsg(res){
+  if(res.reason==='throttled') return 'Too many attempts on this device. Try again in ' + res.wait + ' seconds.';
+  if(res.reason==='weak') return res.message;
+  if(res.reason==='busy') return 'Please wait for the current request to finish.';
+  return '';
+}
+const $id = (i)=>document.getElementById(i);
+const CAPTCHA_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function randInt(n){ const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; }
+function makeCaptcha(canvas){
+  const w = canvas.width, h = canvas.height, ctx = canvas.getContext('2d');
+  let code = '';
+  for(let i=0;i<5;i++) code += CAPTCHA_CHARS[randInt(CAPTCHA_CHARS.length)];
+  ctx.fillStyle = '#f4f1e8'; ctx.fillRect(0, 0, w, h);
+  for(let i=0;i<6;i++){
+    ctx.strokeStyle = 'hsl(' + randInt(360) + ',50%,70%)'; ctx.lineWidth = 1 + randInt(3);
+    ctx.beginPath(); ctx.moveTo(randInt(w), randInt(h));
+    ctx.bezierCurveTo(randInt(w), randInt(h), randInt(w), randInt(h), randInt(w), randInt(h)); ctx.stroke();
+  }
+  const fonts = ['serif','monospace','cursive','fantasy','sans-serif'];
+  const step = (w - 40) / code.length;
+  for(let i=0;i<code.length;i++){
+    ctx.save();
+    ctx.font = 'bold ' + (28 + randInt(11)) + 'px ' + fonts[randInt(fonts.length)];
+    ctx.textBaseline = 'middle';
+    ctx.translate(20 + i*step + randInt(6), h/2 + randInt(14) - 7);
+    ctx.rotate((randInt(100) - 50) / 100 * 0.9);
+    ctx.transform(1, (randInt(60) - 30) / 100, (randInt(60) - 30) / 100, 1, 0, 0);
+    ctx.fillStyle = 'hsl(' + randInt(360) + ',60%,' + (18 + randInt(20)) + '%)';
+    ctx.fillText(code[i], 0, 0);
+    ctx.restore();
+  }
+  for(let i=0;i<90;i++){ ctx.fillStyle = 'hsla(' + randInt(360) + ',50%,40%,.5)'; ctx.fillRect(randInt(w), randInt(h), 2, 2); }
+  for(let i=0;i<3;i++){ ctx.strokeStyle = 'hsla(' + randInt(360) + ',50%,30%,.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, randInt(h)); ctx.lineTo(w, randInt(h)); ctx.stroke(); }
+  return code;
+}
+let capCode = '', pendingEnter = null;
+function newCaptcha(){ capCode = makeCaptcha($id('capCanvas')); $id('capInput').value=''; }
+function showStep(id){
+  ['stepLogin','stepSignup','stepForgot','stepRecovery'].forEach(s=>$id(s).classList.toggle('hidden', s!==id));
+  $id('tabSignin').classList.toggle('on', id==='stepLogin' || id==='stepForgot');
+  $id('tabCreate').classList.toggle('on', id==='stepSignup');
+  if(id==='stepSignup') newCaptcha();
+}
+function runAuth(btn, err, work){
+  btn.onclick = async ()=>{
+    if(btn.disabled) return;
+    btn.disabled = true; err.textContent = '';
+    try{ await work(); }catch(e){ err.textContent = String((e && e.message) || e); }
+    btn.disabled = false;
+  };
+}
+$id('tabSignin').onclick = ()=>showStep('stepLogin');
+$id('tabCreate').onclick = ()=>showStep('stepSignup');
+$id('toCreateBtn').onclick = ()=>showStep('stepSignup');
+$id('capAgain').onclick = newCaptcha;
+$id('backFromForgot').onclick = ()=>showStep('stepLogin');
+$id('forgotLink').onclick = ()=>{ $id('forgotUser').value = $id('loginUser').value; showStep('stepForgot'); };
+$id('loginPass').onkeydown = (ev)=>{ if(ev.key==='Enter') $id('loginBtn').click(); };
+$id('loginUser').onkeydown = (ev)=>{ if(ev.key==='Enter') $id('loginPass').focus(); };
+
+runAuth($id('loginBtn'), $id('loginErr'), async ()=>{
+  const errEl = $id('loginErr');
+  errEl.textContent = 'Signing in…';
+  const res = await loginWithPassword($id('loginUser').value, $id('loginPass').value);
+  if(!res.ok){ errEl.textContent = authMsg(res) || 'Incorrect username or password.'; return; }
+  errEl.textContent = '';
+  enterApp(res, false);
+});
+runAuth($id('signupBtn'), $id('signupErr'), async ()=>{
+  const errEl = $id('signupErr');
+  const un = normUser($id('signupUser').value), p1 = $id('signupPass').value, p2 = $id('signupPass2').value;
+  if(!validNewName(un)){ errEl.textContent = 'Names are 3-24 characters: letters, numbers, _ or -.'; return; }
+  if(p1 !== p2){ errEl.textContent = 'Passwords do not match.'; return; }
+  const pwErr = passwordProblem(p1, un); if(pwErr){ errEl.textContent = pwErr; return; }
+  if($id('capInput').value.trim().toUpperCase() !== capCode){ errEl.textContent = 'Wrong letters, try again.'; newCaptcha(); return; }
+  if(Date.now() - lsGet('chancellor_signup_last', 0) < 30000){ errEl.textContent = 'Please wait a little before creating another account.'; return; }
+  lsSet('chancellor_signup_last', Date.now());
+  errEl.textContent = 'Creating your account…';
+  const res = await createAccount(un, p1);
+  errEl.textContent = '';
+  showRecovery(res, res.recoveryCode, '', res.conflict);
+});
+runAuth($id('forgotBtn'), $id('forgotErr'), async ()=>{
+  const errEl = $id('forgotErr');
+  errEl.textContent = 'Checking…';
+  const res = await recoverWithCode($id('forgotUser').value, $id('forgotCode').value, $id('forgotNewPass').value);
+  if(!res.ok){ errEl.textContent = authMsg(res) || 'Incorrect name or recovery code.'; return; }
+  errEl.textContent = '';
+  showRecovery(res, res.recoveryCode, 'Your password was reset. This is your new recovery code; the old one no longer works.', false);
+});
+function showRecovery(res, code, note, conflict){
+  pendingEnter = res;
+  $id('recNote').textContent = note || '';
+  $id('recCode').textContent = formatRecovery(code);
+  const handle = res.username + res.tag.replace('@','#').toLowerCase();
+  $id('recHandle').textContent = 'Your full login name is ' + handle + '. The #tag part is only needed if someone else uses the same name.' + (conflict ? ' Another account claimed this name at the same moment, so use the full name to sign in.' : '');
+  $id('recSaved').checked = false; $id('recGo').disabled = true;
+  $id('recCopy').textContent = 'Copy';
+  $id('recCopy').onclick = ()=>{ try{ navigator.clipboard.writeText(formatRecovery(code)); $id('recCopy').textContent = 'Copied'; }catch(e){ $id('recCopy').textContent = 'Copy failed'; } };
+  $id('recDl').onclick = ()=>{
+    const blob = new Blob(['Chancellor+ recovery code for ' + handle + '\n' + formatRecovery(code) + '\n'], {type:'text/plain'});
+    const a = el('a',{href:URL.createObjectURL(blob), download:'chancellor-recovery-code.txt'});
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+  showStep('stepRecovery');
+}
+$id('recSaved').onchange = ()=>{ $id('recGo').disabled = !$id('recSaved').checked; };
+$id('recGo').onclick = ()=>{ if(!pendingEnter) return; const r = pendingEnter; pendingEnter = null; enterApp(r, false); };
+$id('browseLink').onclick = ()=>enterApp(null, true);
+
+async function enterApp(k, readonly){
+  READONLY = readonly;
+  ME = readonly ? null : { username: k.username, tag:k.tag, secretKey:k.secretKey, pubkey:k.pubkey };
+  $id('loginScreen').classList.add('hidden');
+  $id('app').classList.remove('hidden');
+  $id('whoami').textContent = readonly ? 'Browsing (not signed in)' : ('+' + ME.username);
+  if(ME) ensureProfile(ME.pubkey, ME.username, ME.tag);
+  const hdr = $id('hdrAvatar'); hdr.textContent = '';
+  hdr.appendChild(avatarEl(ME ? profiles.get(ME.pubkey) : null, 34));
+  $id('myProfileLink').classList.toggle('hidden', readonly);
+  $id('editProfileLink').classList.toggle('hidden', readonly);
+  $id('adminLink').classList.toggle('hidden', !isAdmin());
+  $id('pubKeyLink').classList.toggle('hidden', readonly || !(ME.username===ADMIN_USERNAME || isAdmin()));
+  if(!readonly) lsSet('chancellor_last_username', $id('stayCheckbox').checked ? ME.username : '');
+  subscribeAll(); subscribeMedia();
+  applyView();
+}
+$id('adminLink').onclick = ()=>{ $id('idDrop').classList.add('hidden'); viewingPubkey = null; currentSection = 'admin'; applyView(); };
+$id('pubKeyLink').onclick = ()=>{ $id('idDrop').classList.add('hidden'); if(ME) prompt('Your public key. To make this account an admin, paste it into ADMIN_PUBKEYS near the top of the page script, then redeploy:', ME.pubkey); };
+function okImg(u){ return typeof u==='string' && u && validImageUrl(u); }
+function loadWithFallback(url, onOk){
+  if(!okImg(url)) return;
+  const im = new Image(); im.referrerPolicy = 'no-referrer';
+  im.onload = ()=>onOk(url); im.onerror = ()=>{};
+  im.src = url;
+}
+function applyBranding(){
+  loadWithFallback(LOGIN_BG, u=>{
+    const ls = $id('loginScreen');
+    ls.style.setProperty('--bgimg', 'url("' + u.replace(/"/g,'') + '")');
+    ls.classList.add('hasbg'); $id('bgPlaceholder').classList.add('hidden');
+  });
+  loadWithFallback(LOGO_URL, u=>{
+    document.querySelectorAll('.glogo').forEach(g=>{
+      g.textContent = '';
+      const im = el('img',{src:u, alt:'Chancellor+', referrerpolicy:'no-referrer'});
+      im.style.cssText = 'height:30px;width:auto;display:block;vertical-align:middle';
+      g.appendChild(im);
+    });
+  });
+  [['circles',ICON_CIRCLES_URL],['communities',ICON_COMMUNITIES_URL],['photos',ICON_PHOTOS_URL]].forEach(([k,u])=>{
+    loadWithFallback(u, good=>{
+      const box = document.querySelector('.fi[data-icon-key="'+k+'"]'); if(!box) return;
+      box.textContent = '';
+      const im = el('img',{src:good, alt:k, referrerpolicy:'no-referrer'});
+      im.style.cssText = 'width:54px;height:54px;object-fit:contain';
+      box.appendChild(im);
+    });
+  });
+}
+applyBranding();
+
+function setComposeMode(mode){
+  document.getElementById('cIconText').classList.toggle('active', mode==='text');
+  document.getElementById('cIconPhotos').classList.toggle('active', mode==='photos');
+  document.getElementById('cIconVideo').classList.toggle('active', mode==='video');
+  document.getElementById('composeExtra').classList.toggle('hidden', mode==='text');
+  document.getElementById('composeImg').classList.toggle('hidden', mode!=='photos');
+  document.getElementById('composeVideo').classList.toggle('hidden', mode!=='video');
+}
+document.getElementById('cIconVideo').onclick = ()=>{ setComposeMode('video'); document.getElementById('composeVideo').focus(); };
+document.getElementById('cIconText').onclick = ()=>{ setComposeMode('text'); document.getElementById('composeText').focus(); };
+document.getElementById('cIconPhotos').onclick = ()=>{ setComposeMode('photos'); document.getElementById('composeImg').focus(); };
+document.getElementById('postBtn').onclick = async ()=>{
+  const txt = document.getElementById('composeText').value;
+  const img = document.getElementById('composeImg').value.trim();
+  const vid = document.getElementById('composeVideo').value.trim();
+  const msg = document.getElementById('composeMsg'); msg.textContent='';
+  if(img && !validImageUrl(img)){ msg.textContent = 'Image URL must be https://files.catbox.moe/...'; return; }
+  if(vid && !validVideoUrl(vid)){ msg.textContent = 'Video URL must be a https://files.catbox.moe/ link ending in .mp4, .webm, .mov, .m4v or .ogv'; return; }
+  const ok = await publishPost(txt, img||vid||null, null);
+  if(ok){ document.getElementById('composeText').value=''; document.getElementById('composeImg').value=''; document.getElementById('composeVideo').value=''; }
+};
+document.getElementById('catboxBtn').onclick = ()=>window.open('https://catbox.moe/', '_blank');
+document.getElementById('shareBtn').onclick = ()=>{
+  if(!ME){ alert('Log in to share a post.'); return; }
+  viewingPubkey = null; currentSection = 'home'; currentTab = 'all';
+  document.querySelectorAll('nav button[data-tab]').forEach(x=>x.classList.toggle('active', x.dataset.tab==='all'));
+  applyView();
+  const ta = document.getElementById('composeText');
+  ta.scrollIntoView({behavior:'smooth', block:'center'});
+  ta.focus();
+};
+document.getElementById('saveProfBtn').onclick = saveProfile;
+document.getElementById('changePassBtn').onclick = async ()=>{
+  const errEl = document.getElementById('changePassErr'); errEl.textContent='';
+  const oldP = document.getElementById('oldPassField').value, newP = document.getElementById('newPassField').value;
+  if(!oldP || !newP){ errEl.textContent='Fill in both fields.'; return; }
+  errEl.textContent = 'Verifying current password…';
+  let res; try{ res = await changePassword(oldP, newP); }catch(e){ errEl.textContent = String((e&&e.message)||e); return; }
+  if(!res.ok){ errEl.textContent = authMsg(res) || 'Current password is incorrect. Nothing was changed.'; return; }
+  errEl.textContent = 'Password changed. Your old recovery code no longer works; save the new one below.';
+  document.getElementById('oldPassField').value=''; document.getElementById('newPassField').value='';
+  const nb = document.getElementById('newCodeBox'); nb.classList.remove('hidden'); nb.textContent='';
+  nb.appendChild(el('div',{class:'recoveryCode', style:'font-family:monospace;font-size:18px;background:#f6f6f6;border:1px solid #ccc;padding:10px;user-select:all'}, formatRecovery(res.recoveryCode)));
+};
+document.getElementById('switchIdBtn').onclick = ()=>location.reload();
+document.getElementById('myProfileLink').onclick = ()=>{ document.getElementById('idDrop').classList.add('hidden'); if(ME) viewProfile(ME.pubkey); };
+document.getElementById('editProfileLink').onclick = ()=>{
+  document.getElementById('idDrop').classList.add('hidden');
+  if(!ME) return;
+  viewingPubkey = ME.pubkey; profileSubtab = 'about'; currentSection = 'home';
+  applyView();
+};
+
+function selectTab(tabName){
+  document.querySelectorAll('nav button[data-tab]').forEach(x=>x.classList.toggle('active', x.dataset.tab===tabName));
+  currentTab = tabName; viewingPubkey = null; profileSubtab = 'posts'; currentSection = 'home';
+  applyView();
+}
+document.querySelectorAll('nav button[data-tab]').forEach(b=>{ b.onclick = ()=>selectTab(b.dataset.tab); });
+
+document.getElementById('sectionSwitchBtn').onclick = (ev)=>{ ev.stopPropagation(); document.getElementById('sectionMenu').classList.toggle('hidden'); };
+document.querySelectorAll('#sectionMenu button').forEach(b=>{
+  b.onclick = ()=>{
+    currentSection = b.dataset.section; viewingPubkey = null; profileSubtab = 'posts';
+    document.getElementById('sectionMenu').classList.add('hidden');
+    applyView();
+  };
+});
+document.getElementById('createCommunityBtn').onclick = async ()=>{
+  const errEl = document.getElementById('communityErr'); errEl.textContent='';
+  if(!ME){ errEl.textContent='Log in to create a community.'; return; }
+  const name = document.getElementById('newCommunityName').value.trim();
+  const desc = document.getElementById('newCommunityDesc').value.trim();
+  if(!name){ errEl.textContent='Enter a name.'; return; }
+  await createCommunity(name, desc);
+  document.getElementById('newCommunityName').value=''; document.getElementById('newCommunityDesc').value='';
+  errEl.textContent='Community created.';
+};
+
+document.getElementById('searchBtn').onclick = ()=>{ searchQuery = document.getElementById('search').value; applyView(); };
+document.getElementById('search').oninput = (e)=>{
+  searchQuery = e.target.value;
+  const hint = document.getElementById('searchHint');
+  if(searchQuery.trim()){
+    hint.classList.remove('hidden'); hint.textContent='';
+    const link = el('a',{style:'color:#3c78d8;cursor:pointer'}, 'View profile: ' + searchQuery.trim());
+    link.onclick = ()=>viewProfileByUsername(searchQuery.trim());
+    hint.appendChild(link);
+  } else hint.classList.add('hidden');
+  applyView();
+};
+
+document.getElementById('hdrAvatar').onclick = ()=>{ document.getElementById('idDrop').classList.toggle('hidden'); document.getElementById('notifDrop').classList.add('hidden'); };
+document.getElementById('bellBtn').onclick = ()=>{
+  const drop = document.getElementById('notifDrop');
+  drop.classList.toggle('hidden');
+  document.getElementById('idDrop').classList.add('hidden');
+  if(!drop.classList.contains('hidden') && ME){
+    drop.textContent = '';
+    const items = notificationList();
+    if(items.length===0) drop.appendChild(el('div',{class:'notifrow'}, 'No notifications yet.'));
+    items.slice(0,20).forEach(n=>{
+      const row = el('div',{class:'notifrow'}, n.text);
+      row.onclick = ()=>{ drop.classList.add('hidden'); selectTab('all'); setTimeout(()=>jumpTo(n.postId), 50); };
+      drop.appendChild(row);
+    });
+    lsSet('chancellor_notif_seen_'+ME.username, Math.floor(Date.now()/1000));
+    renderBell();
+  }
+};
+document.getElementById('statusDot').onclick = ()=>alert(document.getElementById('statusDot').title);
+document.addEventListener('click', (ev)=>{
+  if(!ev.target.closest('.idbox')) document.getElementById('idDrop').classList.add('hidden');
+  if(!ev.target.closest('.bellbox')) document.getElementById('notifDrop').classList.add('hidden');
+  if(!ev.target.closest('.sectionSwitch')) document.getElementById('sectionMenu').classList.add('hidden');
+});
+
+['Art & Design','Automotive','Food & Drink','Gaming','Nature','Photography','Science','Sports','Technology'].forEach(c=>{
+  const a = el('a',{}, c);
+  a.onclick = ()=>{ searchQuery = c; document.getElementById('search').value = c; selectTab('explore'); };
+  document.getElementById('exploreCats').appendChild(a);
+});
+
+onOutboxChange = ()=>{ const n = outbox.length; const d = document.getElementById('statusDot'); if(d && n) d.title = d.title.split(' | ')[0] + ' | sending ' + n + ' item' + (n===1?'':'s'); };
+setInterval(pumpOutbox, 4000);
+setInterval(()=>{ if(ME) subscribeMedia(); }, 120000);
+setInterval(renderStatus, 5000);
+setInterval(renderBell, 15000);
+const lastU = lsGet('chancellor_last_username', null);
+if(lastU) document.getElementById('loginUser').value = lastU;
+initIcons();
+</script>
+</body>
+</html>
